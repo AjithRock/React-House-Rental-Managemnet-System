@@ -1,12 +1,14 @@
 import React from "react";
 import "antd/dist/antd.css";
 import { Layout, Menu, Icon ,Tabs} from "antd";
-import { BrowserRouter as Router, Switch, Route, Link ,} from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, Link} from "react-router-dom";
+import Dashboard from './components/dashboard/dashboard'
+import Property from './components/property/property'
 
 const { Header, Content, Footer, Sider } = Layout;
 const { TabPane } = Tabs;
 
-class SiderDemo extends React.Component {
+class App extends React.Component {
   state = {
     collapsed: false
   };
@@ -17,10 +19,6 @@ class SiderDemo extends React.Component {
       collapsed
     });
   };
-
-  componentDidMount(){
-	document.title = "Home";
-  }
 
   render() {
     return (
@@ -50,14 +48,10 @@ class SiderDemo extends React.Component {
                 <span> Tenant </span> <Link to="/Tenant"></Link>
               </Menu.Item>
               <Menu.Item key="4">
-                <Icon type="solution" />
-                <span> Billing </span> <Link to="/Billing"></Link>
-              </Menu.Item>
-              <Menu.Item key="5">
                 <Icon type="file-done" />
                 <span> Report </span> <Link to="/Report"></Link>
               </Menu.Item>
-              <Menu.Item key="6">
+              <Menu.Item key="5">
                 <Icon type="setting" />
                 <span> Admin </span> <Link to="/Admin"></Link>
               </Menu.Item>
@@ -85,9 +79,6 @@ class SiderDemo extends React.Component {
                 <Route path="/Tenant">
                   <Tenant />
                 </Route>
-                <Route path="/Billing">
-                  <Billing />
-                </Route>
                 <Route path="/Report">
                   <Report />
                 </Route>
@@ -101,7 +92,7 @@ class SiderDemo extends React.Component {
                 textAlign: "center"
               }}
             >
-              ©2020
+              Sweet Home ©2020
             </Footer>
           </Layout>
         </Layout>
@@ -110,33 +101,8 @@ class SiderDemo extends React.Component {
   }
 }
 
-function Dashboard() {
-  return (
-    <div
-      style={{
-        padding: 24,
-        background: "#fff",
-        minHeight: 360
-      }}
-    >
-      Dashboard
-    </div>
-  );
-}
 
-function Property() {
-  return (
-    <div
-      style={{
-        padding: 24,
-        background: "#fff",
-        minHeight: 360
-      }}
-    >
-      Property
-    </div>
-  );
-}
+
 
 function Tenant() {
   return (
@@ -148,20 +114,6 @@ function Tenant() {
       }}
     >
       Tenant
-    </div>
-  );
-}
-
-function Billing() {
-  return (
-    <div
-      style={{
-        padding: 24,
-        background: "#fff",
-        minHeight: 360
-      }}
-    >
-      Billing
     </div>
   );
 }
@@ -207,4 +159,4 @@ function Admin() {
   );
 }
 
-export default SiderDemo;
+export default App;
