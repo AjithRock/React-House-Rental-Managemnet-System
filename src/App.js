@@ -7,6 +7,7 @@ import Property from "./components/property/property";
 import Tenant from "./components/tenant/tenant";
 import Report from "./components/report/report";
 import Admin from "./components/admin/admin";
+import PageNotFound from "./PageNotFound";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -77,6 +78,8 @@ class App extends React.Component {
                 <Route path="/Tenant" component={Tenant} />
                 <Route path="/Report" component={Report} />
                 <Route path="/Admin" component={Admin} />
+                <Route path="/Admin" component={Admin} />
+                <Route path="*" component={PageNotFound} />
               </Switch>
             </Content>
             <Footer
