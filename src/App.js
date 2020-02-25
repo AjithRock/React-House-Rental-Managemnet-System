@@ -1,12 +1,14 @@
 import React from "react";
 import "antd/dist/antd.css";
-import { Layout, Menu, Icon ,Tabs} from "antd";
-import { BrowserRouter as Router, Switch, Route, Link} from "react-router-dom";
-import Dashboard from './components/dashboard/dashboard'
-import Property from './components/property/property'
+import { Layout, Menu, Icon } from "antd";
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import Dashboard from "./components/dashboard/dashboard";
+import Property from "./components/property/property";
+import Tenant from "./components/tenant/tenant";
+import Report from "./components/report/report";
+import Admin from "./components/admin/admin";
 
 const { Header, Content, Footer, Sider } = Layout;
-const { TabPane } = Tabs;
 
 class App extends React.Component {
   state = {
@@ -70,21 +72,11 @@ class App extends React.Component {
               }}
             >
               <Switch>
-                <Route exact path="/">
-                  <Dashboard />
-                </Route>
-                <Route path="/Property">
-                  <Property />
-                </Route>
-                <Route path="/Tenant">
-                  <Tenant />
-                </Route>
-                <Route path="/Report">
-                  <Report />
-                </Route>
-                <Route path="/Admin">
-                  <Admin />
-                </Route>
+                <Route exact path="/" component={Dashboard} />
+                <Route path="/Property" component={Property} />
+                <Route path="/Tenant" component={Tenant} />
+                <Route path="/Report" component={Report} />
+                <Route path="/Admin" component={Admin} />
               </Switch>
             </Content>
             <Footer
@@ -99,64 +91,6 @@ class App extends React.Component {
       </Router>
     );
   }
-}
-
-
-
-
-function Tenant() {
-  return (
-    <div
-      style={{
-        padding: 24,
-        background: "#fff",
-        minHeight: 360
-      }}
-    >
-      Tenant
-    </div>
-  );
-}
-
-function Report() {
-  return (
-    <div
-      style={{
-        padding: 24,
-        background: "#fff",
-        minHeight: 360
-      }}
-    >
-      Report
-    </div>
-  );
-}
-
-function Admin() {
-  return (
-    <div
-      style={{
-        padding: 24,
-        background: "#fff",
-        minHeight: 360
-      }}
-    >
-      Admin
-      <Tabs defaultActiveKey="1" >
-        <TabPane tab="Tab 1" key="1">
-          Content of Tab Pane 1
-        </TabPane>
-        <TabPane tab="Tab 2" key="2">
-          Content of Tab Pane 2
-        </TabPane>
-        <TabPane tab="Tab 3" key="3">
-          Content of Tab Pane 3
-        </TabPane>
-      </Tabs>
-      
-    </div>
-    
-  );
 }
 
 export default App;
