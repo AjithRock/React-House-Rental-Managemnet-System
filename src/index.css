@@ -35,6 +35,12 @@ code {
   padding: 15px;
 }
 
+.logo {
+  height: 28px;
+  background: rgba(255, 255, 255, 0.2);
+  margin: 16px;
+}
+
 .notfound .notfound-404 {
   position: relative;
   height: 220px;

@@ -16,10 +16,9 @@ class App extends React.Component {
     collapsed: false
   };
 
-  onCollapse = collapsed => {
-    console.log(collapsed);
+  toggle = () => {
     this.setState({
-      collapsed
+      collapsed: !this.state.collapsed
     });
   };
 
@@ -32,9 +31,15 @@ class App extends React.Component {
           }}
         >
           <Sider
+            style={{
+              overflow: "auto",
+              height: "100vh",
+              position: "fixed",
+              left: 0
+            }}
+            trigger={null}
             collapsible
             collapsed={this.state.collapsed}
-            onCollapse={this.onCollapse}
           >
             <div className="logo" />
             <Menu theme="dark" defaultSelectedKeys={["1"]} mode="inline">
@@ -63,15 +68,23 @@ class App extends React.Component {
           <Layout>
             <Header
               style={{
-                background: "#fff",
-                padding: 0
-              }}
-            />
-            <Content
-              style={{
-                margin: "0 16px"
+                background: "rebeccapurple",
+                padding: 0,
+                marginLeft: this.state.collapsed ? 80 : 200,
+                transition: "all 0.2s",
+                position:"fixed",
+                height:64,
+                width:"100%",
+
               }}
             >
+              <Icon
+                className="trigger"
+                type={this.state.collapsed ? "menu-unfold" : "menu-fold"}
+                onClick={this.toggle}
+              />
+            </Header>
+            <Content style={{ marginLeft: this.state.collapsed ? 80 : 200, overflow: "initial",transition: "all 0.2s",marginTop:68,padding:10 }}>
               <Switch>
                 <Route exact path="/" component={Dashboard} />
                 <Route path="/Property" component={Property} />
@@ -83,10 +96,12 @@ class App extends React.Component {
             </Content>
             <Footer
               style={{
-                textAlign: "center"
+                textAlign: "center",
+                marginLeft: this.state.collapsed ? 80 : 200,
+                transition: "all 0.2s"
               }}
             >
-              Sweet Home ©2020
+              Sweet Home {(new Date().getFullYear())}
             </Footer>
           </Layout>
         </Layout>
