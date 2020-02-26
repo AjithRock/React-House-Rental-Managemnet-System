@@ -3,7 +3,7 @@ const path = require("path");
 const htmlPlugin = new HtmlWebPackPlugin({
   template: "./src/index.html",
   filename: "./index.html",
-  favicon: './src/image/favicon-32x32.png',
+  favicon: './src/assets/image/favicon-32x32.png',
 });
 module.exports = {
   entry: "./src/index.js",

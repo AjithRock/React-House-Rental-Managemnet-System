@@ -78,7 +78,6 @@ class App extends React.Component {
                 <Route path="/Tenant" component={Tenant} />
                 <Route path="/Report" component={Report} />
                 <Route path="/Admin" component={Admin} />
-                <Route path="/Admin" component={Admin} />
                 <Route path="*" component={PageNotFound} />
               </Switch>
             </Content>
