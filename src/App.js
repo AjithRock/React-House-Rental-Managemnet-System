@@ -1,6 +1,6 @@
 import React from "react";
 import "antd/dist/antd.css";
-import { Layout, Menu, Icon, Dropdown,Avatar } from "antd";
+import { Layout, Menu, Icon, Avatar, Button, Divider, Popover } from "antd";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import Dashboard from "./components/dashboard/dashboard";
 import Property from "./components/property/property";
@@ -12,16 +12,10 @@ import PageNotFound from "./PageNotFound";
 const { Header, Content, Footer, Sider } = Layout;
 
 const menu = (
-  <Menu>
-    <Menu.Item key="0">
-      <div>test</div>
-    </Menu.Item>
-    <Menu.Item key="1">
-      <a href="http://www.taobao.com/">2nd menu item</a>
-    </Menu.Item>
-    <Menu.Divider />
-    <Menu.Item key="3">logout</Menu.Item>
-  </Menu>
+  <div style={{color:"red"}}>
+    <Divider />
+    <Button icon="logout">Search</Button>
+  </div>
 );
 
 class App extends React.Component {
@@ -81,30 +75,44 @@ class App extends React.Component {
           <Layout>
             <Header
               style={{
-                background: '#fff',
-                boxShadow: '0 5px 15px rgba(57, 98, 254, 0.02), 0 3px 6px rgba(117, 108, 254, 0.12)',
+                background: "#fff",
+                boxShadow:
+                  "0 5px 15px rgba(57, 98, 254, 0.02), 0 3px 6px rgba(117, 108, 254, 0.12)",
                 padding: 0,
                 marginLeft: this.state.collapsed ? 80 : 200,
                 transition: "all 0.2s",
-                position:"fixed",
-                height:60,
-                width: this.state.collapsed ? 'calc(100% - 80px)' : 'calc(100% - 200px)',
+                position: "fixed",
+                height: 64,
+                width: this.state.collapsed
+                  ? "calc(100% - 80px)"
+                  : "calc(100% - 200px)"
               }}
             >
               <Icon
-              style={{fontSize:16,padding:18}}
+                style={{ fontSize: 16, padding: 18 }}
                 className="trigger"
                 type="menu"
                 onClick={this.toggle}
               />
-              
-              <Dropdown overlay={menu} trigger={['click']}>
-                <a style={{float:"right",paddingRight:10,height:60}} onClick={e => e.preventDefault()}>
-                <Avatar size={28} icon="user" />
-                </a>
-              </Dropdown>
+
+              <Popover
+              overlayClassName="logout-Popover"
+              placement="bottomRight"
+                content={menu}
+                trigger="click"
+              >
+                <Avatar src={require("./assets/image/147133.png")} />
+              </Popover>
             </Header>
-            <Content style={{ marginLeft: this.state.collapsed ? 80 : 200, overflow: "initial",transition: "all 0.2s",marginTop:68,padding:10 }}>
+            <Content
+              style={{
+                marginLeft: this.state.collapsed ? 80 : 200,
+                overflow: "initial",
+                transition: "all 0.2s",
+                marginTop: 68,
+                padding: 10
+              }}
+            >
               <Switch>
                 <Route exact path="/" component={Dashboard} />
                 <Route path="/Property" component={Property} />
@@ -121,7 +129,7 @@ class App extends React.Component {
                 transition: "all 0.2s"
               }}
             >
-              Sweet Home {(new Date().getFullYear())}
+              Sweet Home {new Date().getFullYear()}
             </Footer>
           </Layout>
         </Layout>

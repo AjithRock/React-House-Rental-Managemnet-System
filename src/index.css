@@ -41,6 +41,10 @@ code {
   margin: 16px;
 }
 
+.logout-Popover{
+  position: fixed !important;
+}
+
 .notfound .notfound-404 {
   position: relative;
   height: 220px;
