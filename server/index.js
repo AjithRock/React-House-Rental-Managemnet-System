@@ -1,6 +1,8 @@
 const express = require("express");
 const cors = require("cors");
 const mysql = require("mysql");
+const useragent = require('express-useragent');
+//const ip = require('ip');
 
 require('dotenv').config();
 
@@ -20,7 +22,14 @@ const mockResponse = {
 };
 
 app.use(cors());
+app.use(useragent.express());
 app.use(express.json());
+app.enable('trust proxy');
+ 
+
+app.get('/useragent', function(req, res){
+  res.send(req.ip);
+});
 
 app.listen(port, () => {
   console.log(`Server is running on port: ${port}`);

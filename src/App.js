@@ -8,13 +8,14 @@ import Tenant from "./components/tenant/tenant";
 import Report from "./components/report/report";
 import Admin from "./components/admin/admin";
 import PageNotFound from "./PageNotFound";
+import UserAvatar from "./assets/image/147133.png";
 
 const { Header, Content, Footer, Sider } = Layout;
 
 const menu = (
   <div style={{color:"red"}}>
     <Divider />
-    <Button icon="logout">Search</Button>
+    <Button icon="logout" onClick={()=> console.log("hahaha")}>Search</Button>
   </div>
 );
 
@@ -79,6 +80,9 @@ class App extends React.Component {
                 boxShadow:
                   "0 5px 15px rgba(57, 98, 254, 0.02), 0 3px 6px rgba(117, 108, 254, 0.12)",
                 padding: 0,
+                display:"flex",
+                justifyContent: "space-between",
+                alignItems:"center",
                 marginLeft: this.state.collapsed ? 80 : 200,
                 transition: "all 0.2s",
                 position: "fixed",
@@ -94,14 +98,13 @@ class App extends React.Component {
                 type="menu"
                 onClick={this.toggle}
               />
-
               <Popover
               overlayClassName="logout-Popover"
               placement="bottomRight"
                 content={menu}
                 trigger="click"
               >
-                <Avatar src={require("./assets/image/147133.png")} />
+                <Avatar style={{float:"right",margin:11}} src={UserAvatar} />
               </Popover>
             </Header>
             <Content
