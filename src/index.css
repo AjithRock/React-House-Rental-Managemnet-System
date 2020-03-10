@@ -1,4 +1,5 @@
-@import url('https://fonts.googleapis.com/css?family=Kanit:300,400&display=swap');
+@import url("https://fonts.googleapis.com/css?family=Kanit:300,400&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Nunito:400,700,600&display=swap");
 
 body {
   margin: 0;
@@ -23,9 +24,9 @@ code {
   position: absolute;
   left: 50%;
   top: 50%;
-  -webkit-transform: translate(-50%,-50%);
-  -ms-transform: translate(-50%,-50%);
-  transform: translate(-50%,-50%);
+  -webkit-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
 }
 .notfound {
   max-width: 767px;
@@ -41,7 +42,7 @@ code {
   margin: 16px;
 }
 
-.logout-Popover{
+.logout-Popover {
   position: fixed !important;
 }
 
@@ -51,7 +52,7 @@ code {
 }
 
 .notfound p {
-  font-family: kanit,sans-serif;
+  font-family: kanit, sans-serif;
   font-size: 16px;
   font-weight: 200;
   margin-top: 0;
@@ -59,20 +60,75 @@ code {
 }
 
 .notfound .notfound-404 h1 {
-  font-family: kanit,sans-serif;
+  font-family: kanit, sans-serif;
   position: absolute;
   left: 50%;
   top: 50%;
-  -webkit-transform: translate(-50%,-50%);
-  -ms-transform: translate(-50%,-50%);
-  transform: translate(-50%,-50%);
+  -webkit-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
   font-size: 186px;
   font-weight: 200;
   margin: 0;
-  background: linear-gradient(130deg,#ffa34f,#ff6f68);
-      background-clip: border-box;
+  background: linear-gradient(130deg, #ffa34f, #ff6f68);
+  background-clip: border-box;
   color: transparent;
   -webkit-background-clip: text;
   background-clip: text;
   text-transform: uppercase;
+}
+
+.user-logoutPanel {
+  text-align: center;
+}
+
+.user-detail {
+  width: 245px;
+  text-align: center;
+  margin-top: 12px;
+}
+
+.user-name {
+  color: #202124;
+  letter-spacing: 0.29px;
+  font-weight: 500;
+  text-overflow: ellipsis;
+  margin-top: 8px;
+  font-size: 16px;
+  font-variant: small-caps;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.user-mail {
+  color: #5f6368;
+  text-overflow: ellipsis;
+  letter-spacing: normal;
+  text-align: center;
+  overflow: hidden;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.user-logout-divder {
+  margin: 12px 0px !important;
+  width: calc(100% + 32px) !important;
+  margin-left: -16px !important;
+}
+
+.header-title {
+  color: rgb(90, 92, 105);
+  font-size: 24px;
+  font-family: "Nunito", sans-serif;
+  margin-bottom: 0px !important;
+  line-height: 32px;
+}
+
+.main-container{
+  background: #fff;
+  padding: 18px;
+}
+
+.header-title-divder {
+  margin: 12px 0px !important;
+  width: calc(100% + 36px) !important;
+  margin-left: -18px !important;
 }

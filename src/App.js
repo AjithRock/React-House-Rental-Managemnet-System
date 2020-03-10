@@ -12,10 +12,19 @@ import UserAvatar from "./assets/image/147133.png";
 
 const { Header, Content, Footer, Sider } = Layout;
 
-const menu = (
-  <div style={{color:"red"}}>
-    <Divider />
-    <Button icon="logout" onClick={()=> console.log("hahaha")}>Search</Button>
+const LogoutDiv = (
+  <div className="user-logoutPanel">
+    <div className="user-detail">
+      <Avatar size={60} src={UserAvatar} />
+      <div className="user-name">Ajith Rock</div>
+      <div className="user-mail">ajithrocks006@admin.com</div>
+    </div>
+    <Divider className="user-logout-divder" />
+    <div style={{ textAlign: "center",marginBottom:4}}>
+      <Button onClick={() => console.log("hahaha")}>
+        Logout
+      </Button>
+    </div>
   </div>
 );
 
@@ -80,9 +89,9 @@ class App extends React.Component {
                 boxShadow:
                   "0 5px 15px rgba(57, 98, 254, 0.02), 0 3px 6px rgba(117, 108, 254, 0.12)",
                 padding: 0,
-                display:"flex",
+                display: "flex",
                 justifyContent: "space-between",
-                alignItems:"center",
+                alignItems: "center",
                 marginLeft: this.state.collapsed ? 80 : 200,
                 transition: "all 0.2s",
                 position: "fixed",
@@ -99,12 +108,15 @@ class App extends React.Component {
                 onClick={this.toggle}
               />
               <Popover
-              overlayClassName="logout-Popover"
-              placement="bottomRight"
-                content={menu}
+                overlayClassName="logout-Popover"
+                placement="bottomRight"
+                content={LogoutDiv}
                 trigger="click"
               >
-                <Avatar style={{float:"right",margin:11}} src={UserAvatar} />
+                <Avatar
+                  style={{ float: "right", margin: 11, cursor: "pointer" }}
+                  src={UserAvatar}
+                />
               </Popover>
             </Header>
             <Content
