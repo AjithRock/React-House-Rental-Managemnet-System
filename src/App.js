@@ -12,25 +12,28 @@ import UserAvatar from "./assets/image/147133.png";
 
 const { Header, Content, Footer, Sider } = Layout;
 
-const LogoutDiv = (
+const LogoutDiv = data => (
   <div className="user-logoutPanel">
     <div className="user-detail">
-      <Avatar size={60} src={UserAvatar} />
-      <div className="user-name">Ajith Rock</div>
-      <div className="user-mail">ajithrocks006@admin.com</div>
+      <Avatar size={60} src={data.avatar} />
+      <div className="user-name">{data.username}</div>
+      <div className="user-mail">{data.email}</div>
     </div>
     <Divider className="user-logout-divder" />
-    <div style={{ textAlign: "center",marginBottom:4}}>
-      <Button onClick={() => console.log("hahaha")}>
-        Logout
-      </Button>
+    <div style={{ textAlign: "center", marginBottom: 4 }}>
+      <Button onClick={() => console.log(data)}>Logout</Button>
     </div>
   </div>
 );
 
 class App extends React.Component {
   state = {
-    collapsed: false
+    collapsed: false,
+    userData: {
+      username: "Admin User",
+      email: "adminuser@admin.com",
+      avatar: "src/assets/image/147133.png"
+    }
   };
 
   toggle = () => {
@@ -69,14 +72,18 @@ class App extends React.Component {
                 <span> Property </span> <Link to="/Property"></Link>
               </Menu.Item>
               <Menu.Item key="3">
+                <Icon type="shop" />
+                <span> Unit </span> <Link to="/Unit"></Link>
+              </Menu.Item>
+              <Menu.Item key="4">
                 <Icon type="user" />
                 <span> Tenant </span> <Link to="/Tenant"></Link>
               </Menu.Item>
-              <Menu.Item key="4">
+              <Menu.Item key="5">
                 <Icon type="file-done" />
                 <span> Report </span> <Link to="/Report"></Link>
               </Menu.Item>
-              <Menu.Item key="5">
+              <Menu.Item key="6">
                 <Icon type="setting" />
                 <span> Admin </span> <Link to="/Admin"></Link>
               </Menu.Item>
@@ -107,17 +114,20 @@ class App extends React.Component {
                 type="menu"
                 onClick={this.toggle}
               />
-              <Popover
-                overlayClassName="logout-Popover"
-                placement="bottomRight"
-                content={LogoutDiv}
-                trigger="click"
-              >
-                <Avatar
-                  style={{ float: "right", margin: 11, cursor: "pointer" }}
-                  src={UserAvatar}
-                />
-              </Popover>
+              <div>
+                <span className="user-tile">{this.state.userData.username}</span>
+                <Popover
+                  overlayClassName="logout-Popover"
+                  placement="bottomRight"
+                  content={LogoutDiv(this.state.userData)}
+                  trigger="click"
+                >
+                  <Avatar
+                    style={{ float: "right", margin: '16px 10px', cursor: "pointer" }}
+                    src={UserAvatar}
+                  />
+                </Popover>
+              </div>
             </Header>
             <Content
               style={{

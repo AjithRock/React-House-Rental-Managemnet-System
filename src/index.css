@@ -15,27 +15,6 @@ code {
     monospace;
 }
 
-#notfound {
-  position: relative;
-  height: 100vh;
-}
-
-#notfound .notfound {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  -webkit-transform: translate(-50%, -50%);
-  -ms-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
-}
-.notfound {
-  max-width: 767px;
-  width: 100%;
-  line-height: 1.4;
-  text-align: center;
-  padding: 15px;
-}
-
 .logo {
   height: 24px;
   background: rgba(255, 255, 255, 0.2);
@@ -44,38 +23,6 @@ code {
 
 .logout-Popover {
   position: fixed !important;
-}
-
-.notfound .notfound-404 {
-  position: relative;
-  height: 220px;
-}
-
-.notfound p {
-  font-family: kanit, sans-serif;
-  font-size: 16px;
-  font-weight: 200;
-  margin-top: 0;
-  margin-bottom: 25px;
-}
-
-.notfound .notfound-404 h1 {
-  font-family: kanit, sans-serif;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  -webkit-transform: translate(-50%, -50%);
-  -ms-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
-  font-size: 186px;
-  font-weight: 200;
-  margin: 0;
-  background: linear-gradient(130deg, #ffa34f, #ff6f68);
-  background-clip: border-box;
-  color: transparent;
-  -webkit-background-clip: text;
-  background-clip: text;
-  text-transform: uppercase;
 }
 
 .user-logoutPanel {
@@ -91,12 +38,12 @@ code {
 .user-name {
   color: #202124;
   letter-spacing: 0.29px;
-  font-weight: 500;
+  font-weight: 400;
   text-overflow: ellipsis;
   margin-top: 8px;
   font-size: 16px;
-  font-variant: small-caps;
-  font-family: Arial, Helvetica, sans-serif;
+  overflow: hidden;
+  font-family: kanit, sans-serif;
 }
 
 .user-mail {
@@ -105,7 +52,8 @@ code {
   letter-spacing: normal;
   text-align: center;
   overflow: hidden;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: kanit, sans-serif;
+  font-weight: 300;
 }
 
 .user-logout-divder {
@@ -122,7 +70,7 @@ code {
   line-height: 32px;
 }
 
-.main-container{
+.main-container {
   background: #fff;
   padding: 18px;
 }
@@ -131,4 +79,10 @@ code {
   margin: 12px 0px !important;
   width: calc(100% + 36px) !important;
   margin-left: -18px !important;
+}
+
+.user-tile {
+  font-weight: 400;
+  font-family: "kanit", sans-serif;
+  font-size: 15px;
 }
