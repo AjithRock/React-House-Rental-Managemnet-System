@@ -1,5 +1,5 @@
 @import url("https://fonts.googleapis.com/css?family=Kanit:300,400&display=swap");
-@import url("https://fonts.googleapis.com/css?family=Nunito:400,700,600&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Nunito:400,500,700,600&display=swap");
 
 body {
   margin: 0;
@@ -64,10 +64,17 @@ code {
 
 .header-title {
   color: rgb(90, 92, 105);
-  font-size: 24px;
+  font-size: 1.75rem;
   font-family: "Nunito", sans-serif;
-  margin-bottom: 0px !important;
-  line-height: 32px;
+  line-height: 1.2;
+  font-weight: 400;
+  margin: 24px 0px;
+  display: inline-block;
+}
+.header-div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .main-container {
@@ -75,14 +82,20 @@ code {
   padding: 18px;
 }
 
-.header-title-divder {
-  margin: 12px 0px !important;
-  width: calc(100% + 36px) !important;
-  margin-left: -18px !important;
-}
-
 .user-tile {
   font-weight: 400;
   font-family: "kanit", sans-serif;
   font-size: 15px;
+}
+
+.app-container {
+  overflow: "initial";
+  transition: all 0.2s ease 0s;
+  margin-top: 68px;
+  padding: 0px 24px;
+}
+
+/* Ant design over write */
+.ant-table-pagination.ant-pagination {
+  margin-right: 10px;
 }

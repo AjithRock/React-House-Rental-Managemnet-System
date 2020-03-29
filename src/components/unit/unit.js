@@ -7,51 +7,45 @@ import {
   message,
   Drawer,
   Button,
-  Card
+  Card,
+  Select
 } from "antd";
 import axios from "axios";
 import { PlusOutlined } from "@ant-design/icons";
 
-
-function Property() {
+function Unit() {
   const [from] = Form.useForm();
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState([]);
   const [visible, setVisible] = useState(false);
   const [update, setUpdate] = useState(false);
   const [editingKey, setEditingKey] = useState("");
-
+  const [propertyObj, setPropertyObj] = useState([]);
+  const [propertyDropdownLoading, SetPropertyDropdownLoading] = useState(true);
+  const [unitObj, setunitObj] = useState([]);
+  const [unitDropdownLoading, SetunitDropdownLoading] = useState(false);
+   
   const columns = [
     {
-      title: "Name",
-      dataIndex: "name",
-      key: "name"
+      title: "Property Name",
+      dataIndex: "propertyName",
+      key: "propertyName"
     },
     {
-      title: "Address",
-      dataIndex: "address",
-      key: "address"
+      title: "Unit Name",
+      dataIndex: "unitName",
+      key: "unitName"
     },
 
     {
-      title: "City",
-      dataIndex: "city",
-      key: "city"
+      title: "Unit Type",
+      dataIndex: "unitType",
+      key: "unitType"
     },
     {
-      title: "State",
-      dataIndex: "state",
-      key: "state"
-    },
-    {
-      title: "Zip",
-      dataIndex: "zip",
-      key: "zip"
-    },
-    {
-      title: "Country",
-      dataIndex: "country",
-      key: "country"
+      title: "Area (in Sq.ft)",
+      dataIndex: "areaInSqft",
+      key: "areaInSqft"
     },
     {
       title: "Description",
@@ -81,7 +75,7 @@ function Property() {
     }
   ];
 
-  const AddProperty = () => {
+  const addUnit = () => {
     setUpdate(false);
     setVisible(true);
     setEditingKey("");
@@ -95,9 +89,9 @@ function Property() {
   const handleAdd = values => {
     setVisible(false);
     if (update) {
-      message.loading({ content: "Updating Property", key: "Property" });
+      message.loading({ content: "Updating Property", key: "Unit" });
       axios
-        .put(`${global.url}/api/property/${editingKey}`, values)
+        .put(`${global.url}/api/Unit/${editingKey}`, values)
         .then(function(response) {
           var editData = response.data;
           editData.key = parseInt(response.data.id);
@@ -108,8 +102,8 @@ function Property() {
           newData.splice(index, 1, { ...item, ...editData });
           setData(newData);
           message.success({
-            content: "Property Updated successfully!",
-            key: "Property",
+            content: "Unit Updated successfully!",
+            key: "Unit",
             duration: 3
           });
         })
@@ -121,24 +115,24 @@ function Property() {
           });
         });
     } else {
-      message.loading({ content: "Adding Property", key: "Property" });
+      message.loading({ content: "Adding Unit", key: "Unit" });
       axios
-        .post(`${global.url}/api/property`, values)
+        .post(`${global.url}/api/unit`, values)
         .then(function(response) {
           var addedData = response.data;
           addedData.key = response.data.id;
           delete addedData.id;
           setData(data.concat(addedData));
           message.success({
-            content: "Property Added successfully!",
-            key: "Property",
+            content: "Unit Added successfully!",
+            key: "Unit",
             duration: 3
           });
         })
         .catch(function(error) {
           message.error({
-            content: "Failed to Add Property!",
-            key: "Property",
+            content: "Failed to Add Unit!",
+            key: "Unit",
             duration: 3
           });
         });
@@ -174,38 +168,61 @@ function Property() {
       });
   };
 
-  const getPropertyList = () => {
+  const getUnitList = () => {
     axios
-    .get(`${global.url}/api/property`)
-    .then(function(response) {
-      setLoading(false);
-      setData(response.data);
-    })
-    .catch(function(error) {
-      message.error({
-        content: "Failed to Load Property List!",
-        key: "Property",
-        duration: 3
+      .get(`${global.url}/api/unit`)
+      .then(function(response) {
+        setLoading(false);
+        console.log(response.data);
+        setData(response.data);
+      })
+      .catch(function(error) {
+        message.error({
+          content: "Failed to Load Unit List!",
+          key: "Unit",
+          duration: 3
+        });
       });
-    });
-  }
+  };
+
+  const getUnitType = () => {
+    axios
+      .get(`${global.url}/api/utils/unitType`)
+      .then(function(response) {
+        SetunitDropdownLoading(false);
+        setunitObj(response.data)
+      })
+      .catch(function(error) {});
+  };
+
+  const getProperty = () => {
+    axios
+      .get(`${global.url}/api/property`)
+      .then(function(response) {
+        SetPropertyDropdownLoading(false);
+        setPropertyObj(response.data);
+      })
+      .catch(function(error) {});
+  };
 
   useEffect(() => {
-    getPropertyList();   
+    getProperty();
+    getUnitList();
+    getUnitType();
   }, []);
 
   return (
     <div>
       <div className="header-div">
-        <h1 className="header-title">Property </h1>
-        <Button type="primary" ghost onClick={AddProperty}>
+        <h1 className="header-title">Unit</h1>
+        <Button type="primary" ghost onClick={addUnit}>
           <PlusOutlined />
-          New Property
+          New Unit
         </Button>
       </div>
       <div>
         <Drawer
-          title={update ? "Edit Property" : "Add Property"}
+          title={update ? "Edit Unit" : "Add Unit"}
           width={540}
           visible={visible}
           onClose={onClose}
@@ -217,58 +234,82 @@ function Property() {
             name="nest-messages"
             onFinish={handleAdd}
             form={from}
-            name="property"
+            name="unit"
             validateMessages={global.validateMessages}
           >
             <Form.Item
-              name="name"
-              label="Name"
+              name="propertyID"
+              label="Propery Name"
+              labelAlign="left"
               colon={false}
               rules={[{ required: true }]}
             >
-              <Input />
+              <Select
+                loading={propertyDropdownLoading}
+                showSearch
+                allowClear
+                filterOption={(input, option) =>
+                  option.children.toLowerCase().indexOf(input.toLowerCase()) >=
+                  0
+                }
+              >
+                {propertyObj.map(function(item, index) {
+                  return (
+                    <Select.Option key={item.key} value={item.key}>
+                      {item.name}
+                    </Select.Option>
+                  );
+                })}
+              </Select>
             </Form.Item>
             <Form.Item
-              name="address"
-              label="Address"
+              name="unitName"
+              label="Unit Name"
               rules={[{ required: true }]}
-              colon={false}
-            >
-              <Input />
-            </Form.Item>
-            <Form.Item
-              name="city"
-              label="City"
-              rules={[{ required: true }]}
-              colon={false}
-            >
-              <Input />
-            </Form.Item>
-            <Form.Item
-              name="state"
-              label="State"
-              rules={[{ required: true }]}
-              colon={false}
-            >
-              <Input />
-            </Form.Item>
-            <Form.Item
-              name="zip"
-              label="Zip"
-              rules={[{ required: true }]}
+              labelAlign="left"
               colon={false}
             >
               <Input />
             </Form.Item>
             <Form.Item
-              name="country"
-              label="Country"
+              name="unitTypeID"
+              label="Unit Type"
               rules={[{ required: true }]}
+              labelAlign="left"
+              colon={false}
+            >
+              <Select
+                loading={unitDropdownLoading}
+                showSearch
+                allowClear
+                filterOption={(input, option) =>
+                  option.children.toLowerCase().indexOf(input.toLowerCase()) >=
+                  0
+                }
+              >
+                {unitObj.map(function(item, index) {
+                  return (
+                    <Select.Option key={item.key} value={item.key}>
+                      {item.Name}
+                    </Select.Option>
+                  );
+                })}
+              </Select>
+            </Form.Item>
+            <Form.Item
+              name="areaInSqft"
+              label="Area (in Sq. ft)"
+              labelAlign="left"
               colon={false}
             >
               <Input />
             </Form.Item>
-            <Form.Item name="description" colon={false} label="Description">
+            <Form.Item
+              name="description"
+              labelAlign="left"
+              colon={false}
+              label="Description"
+            >
               <Input.TextArea />
             </Form.Item>
             <Form.Item wrapperCol={{ ...global.layout.wrapperCol, offset: 10 }}>
@@ -299,4 +340,4 @@ function Property() {
   );
 }
 
-export default Property;
+export default Unit;

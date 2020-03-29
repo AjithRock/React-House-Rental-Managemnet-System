@@ -1,14 +1,24 @@
 import React from "react";
-import "antd/dist/antd.css";
-import { Layout, Menu, Icon, Avatar, Button, Divider, Popover } from "antd";
+import { Layout, Menu, Avatar, Button, Divider, Popover } from "antd";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import Dashboard from "./components/dashboard/dashboard";
 import Property from "./components/property/property";
+import Unit from "./components/unit/unit";
 import Tenant from "./components/tenant/tenant";
 import Report from "./components/report/report";
 import Admin from "./components/admin/admin";
 import PageNotFound from "./PageNotFound";
 import UserAvatar from "./assets/image/147133.png";
+
+import {
+  MenuOutlined,
+  SettingOutlined,
+  FileDoneOutlined,
+  UserOutlined,
+  ShopOutlined,
+  HomeOutlined,
+  DashboardOutlined
+} from "@ant-design/icons";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -64,28 +74,28 @@ class App extends React.Component {
             <div className="logo" />
             <Menu theme="dark" defaultSelectedKeys={["1"]} mode="inline">
               <Menu.Item key="1">
-                <Icon type="dashboard" />
+                <DashboardOutlined />
                 <span> Dashboard </span> <Link to="/"></Link>
               </Menu.Item>
               <Menu.Item key="2">
-                <Icon type="home" />
-                <span> Property </span> <Link to="/Property"></Link>
+                <HomeOutlined />
+                <span>Property</span> <Link to="/Property"></Link>
               </Menu.Item>
               <Menu.Item key="3">
-                <Icon type="shop" />
-                <span> Unit </span> <Link to="/Unit"></Link>
+                <ShopOutlined />
+                <span>Unit</span> <Link to="/Unit"></Link>
               </Menu.Item>
               <Menu.Item key="4">
-                <Icon type="user" />
-                <span> Tenant </span> <Link to="/Tenant"></Link>
+                <UserOutlined />
+                <span>Tenant</span> <Link to="/Tenant"></Link>
               </Menu.Item>
               <Menu.Item key="5">
-                <Icon type="file-done" />
-                <span> Report </span> <Link to="/Report"></Link>
+                <FileDoneOutlined />
+                <span>Report</span> <Link to="/Report"></Link>
               </Menu.Item>
               <Menu.Item key="6">
-                <Icon type="setting" />
-                <span> Admin </span> <Link to="/Admin"></Link>
+                <SettingOutlined />
+                <span>Admin</span> <Link to="/Admin"></Link>
               </Menu.Item>
             </Menu>
           </Sider>
@@ -103,19 +113,22 @@ class App extends React.Component {
                 transition: "all 0.2s",
                 position: "fixed",
                 height: 64,
+                zIndex: 1,
                 width: this.state.collapsed
                   ? "calc(100% - 80px)"
                   : "calc(100% - 200px)"
               }}
             >
-              <Icon
+              <MenuOutlined
                 style={{ fontSize: 16, padding: 18 }}
                 className="trigger"
                 type="menu"
                 onClick={this.toggle}
               />
               <div>
-                <span className="user-tile">{this.state.userData.username}</span>
+                <span className="user-tile">
+                  {this.state.userData.username}
+                </span>
                 <Popover
                   overlayClassName="logout-Popover"
                   placement="bottomRight"
@@ -123,24 +136,26 @@ class App extends React.Component {
                   trigger="click"
                 >
                   <Avatar
-                    style={{ float: "right", margin: '16px 10px', cursor: "pointer" }}
+                    style={{
+                      float: "right",
+                      margin: "16px 10px",
+                      cursor: "pointer"
+                    }}
                     src={UserAvatar}
                   />
                 </Popover>
               </div>
             </Header>
             <Content
+              className="app-container"
               style={{
-                marginLeft: this.state.collapsed ? 80 : 200,
-                overflow: "initial",
-                transition: "all 0.2s",
-                marginTop: 68,
-                padding: 10
+                marginLeft: this.state.collapsed ? 80 : 200
               }}
             >
               <Switch>
                 <Route exact path="/" component={Dashboard} />
                 <Route path="/Property" component={Property} />
+                <Route path="/Unit" component={Unit} />
                 <Route path="/Tenant" component={Tenant} />
                 <Route path="/Report" component={Report} />
                 <Route path="/Admin" component={Admin} />

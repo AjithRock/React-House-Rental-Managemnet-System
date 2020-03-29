@@ -1,0 +1,68 @@
+USE home;
+
+CREATE TABLE  tblProperty (
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    Name VARCHAR(30) NOT NULL,
+    Address VARCHAR(20),
+    Country varchar(20),
+    City VARCHAR(20),
+    State VARCHAR(20),
+    Zip VARCHAR(20),
+    Deleted bit NOT NULL DEFAULT 0,
+	CreationDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	CreatedBy INT NUll,
+	UpdatedDate	TIMESTAMP NULL, 
+	UpdatedBy INT NULL,
+	DeletedDate TIMESTAMP NULL,
+	DeletedBy INT NULL
+)  ENGINE=INNODB;
+
+
+CREATE TABLE IF NOT EXISTS `customers` (
+  id int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  email varchar(255) NOT NULL,
+  name varchar(255) NOT NULL,
+  active BOOLEAN DEFAULT false
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+CREATE TABLE  luUnitType (
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    Name VARCHAR(30) NOT NULL,
+    Deleted bit NOT NULL DEFAULT 0,
+	CreationDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	CreatedBy INT NUll,
+	UpdatedDate	TIMESTAMP NULL, 
+	UpdatedBy INT NULL,
+	DeletedDate TIMESTAMP NULL,
+	DeletedBy INT NULL
+)  ENGINE=INNODB;
+
+
+
+INSERT INTO luUnitType (Name) VALUES ('Bike');
+INSERT INTO luUnitType (Name) VALUES ('Car');
+INSERT INTO luUnitType (Name) VALUES ('Shop');
+INSERT INTO luUnitType (Name) VALUES ('House');
+
+
+CREATE TABLE  tblUnit (
+    UnitID INT AUTO_INCREMENT PRIMARY KEY,
+    UnitName VARCHAR(30) NOT NULL,
+    UnitTypeID Int NOt NULL,
+    FOREIGN KEY (UnitTypeID) REFERENCES luUnitType(ID),
+    PropertyID Int NOt NULL,
+    FOREIGN KEY (PropertyID) REFERENCES tblProperty(ID),
+    AreaInSqft VARCHAR(20),
+    Description VARCHAR(100),
+    Deleted bit NOT NULL DEFAULT 0,
+	CreationDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	CreatedBy INT NUll,
+	UpdatedDate	TIMESTAMP NULL, 
+	UpdatedBy INT NULL,
+	DeletedDate TIMESTAMP NULL,
+	DeletedBy INT NULL
+)  ENGINE=INNODB;
+
+
