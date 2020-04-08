@@ -26,8 +26,11 @@ app.listen(port, () => {
 //utils route
 require("./routes/utils.route")(app);
 
-//property route
+//Property route
 require("./routes/property.route")(app);
 
 //Unit route
 require("./routes/unit.route")(app);
+
+//Tenant route
+require("./routes/tenant.route")(app);

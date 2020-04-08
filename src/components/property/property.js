@@ -12,7 +12,7 @@ import {
 import axios from "axios";
 import { PlusOutlined } from "@ant-design/icons";
 
-function Property() {
+export default function Property() {
   const [from] = Form.useForm();
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState([]);
@@ -23,43 +23,70 @@ function Property() {
   const columns = [
     {
       title: "Name",
-      dataIndex: "name",
-      key: "name"
+      dataIndex: "propertyName",
+      key: "propertyName",
+      ellipsis: true,
+      width: 200,
+      sorter: (a, b) => global.customSort(a.name, b.name),
+      sortDirections: ["ascend", "descend"]
     },
     {
       title: "Address",
       dataIndex: "address",
-      key: "address"
+      key: "address",
+      ellipsis: true,
+      sorter: (a, b) => global.customSort(a.address, b.address),
+      sortDirections: ["ascend", "descend"]
     },
 
     {
       title: "City",
       dataIndex: "city",
-      key: "city"
+      key: "city",
+      ellipsis: true,
+      width: 110,
+      sorter: (a, b) => global.customSort(a.city, b.city),
+      sortDirections: ["ascend", "descend"]
     },
     {
       title: "State",
       dataIndex: "state",
-      key: "state"
+      key: "state",
+      ellipsis: true,
+      width: 140,
+      sorter: (a, b) => global.customSort(a.state, b.state),
+      sortDirections: ["ascend", "descend"]
     },
     {
       title: "Zip",
       dataIndex: "zip",
-      key: "zip"
+      key: "zip",
+      ellipsis: true,
+      width: 110,
+      sorter: (a, b) => global.customSort(a.zip, b.zip),
+      sortDirections: ["ascend", "descend"]
     },
     {
       title: "Country",
       dataIndex: "country",
-      key: "country"
+      key: "country",
+      ellipsis: true,
+      width: 110,
+      sorter: (a, b) => global.customSort(a.country, b.country),
+      sortDirections: ["ascend", "descend"]
     },
     {
       title: "Description",
       dataIndex: "description",
-      key: "description"
+      key: "description",
+      ellipsis: true,
+      sorter: (a, b) => global.customSort(a.description, b.description),
+      sortDirections: ["ascend", "descend"]
     },
     {
       title: "Action",
       dataIndex: "Action",
+      width: 110,
       render: (text, record) =>
         data.length >= 1 ? (
           <span>
@@ -80,7 +107,8 @@ function Property() {
     }
   ];
 
-  const AddProperty = () => {
+  const addPropery = () => {
+    from.resetFields();
     setUpdate(false);
     setVisible(true);
     setEditingKey("");
@@ -127,6 +155,9 @@ function Property() {
           var addedData = response.data;
           addedData.key = response.data.id;
           delete addedData.id;
+          console.log(data);
+          console.log(addedData);
+
           setData(data.concat(addedData));
           message.success({
             content: "Property Added successfully!",
@@ -197,7 +228,7 @@ function Property() {
     <div>
       <div className="header-div">
         <h1 className="header-title">Property </h1>
-        <Button type="primary" ghost onClick={AddProperty}>
+        <Button type="primary" ghost onClick={addPropery}>
           <PlusOutlined />
           New Property
         </Button>
@@ -219,55 +250,33 @@ function Property() {
             name="property"
             validateMessages={global.validateMessages}
           >
-            <Form.Item
-              name="name"
-              label="Name"
-              colon={false}
-              rules={[{ required: true }]}
-            >
+            <Form.Item name="propertyName" label="Name" rules={[{ required: true }]}>
               <Input />
             </Form.Item>
             <Form.Item
               name="address"
               label="Address"
               rules={[{ required: true }]}
-              colon={false}
             >
               <Input />
             </Form.Item>
-            <Form.Item
-              name="city"
-              label="City"
-              rules={[{ required: true }]}
-              colon={false}
-            >
+            <Form.Item name="city" label="City" rules={[{ required: true }]}>
               <Input />
             </Form.Item>
-            <Form.Item
-              name="state"
-              label="State"
-              rules={[{ required: true }]}
-              colon={false}
-            >
+            <Form.Item name="state" label="State" rules={[{ required: true }]}>
               <Input />
             </Form.Item>
-            <Form.Item
-              name="zip"
-              label="Zip"
-              rules={[{ required: true }]}
-              colon={false}
-            >
+            <Form.Item name="zip" label="Zip" rules={[{ required: true }]}>
               <Input />
             </Form.Item>
             <Form.Item
               name="country"
               label="Country"
               rules={[{ required: true }]}
-              colon={false}
             >
               <Input />
             </Form.Item>
-            <Form.Item name="description" colon={false} label="Description">
+            <Form.Item name="description" label="Description">
               <Input.TextArea />
             </Form.Item>
             <Form.Item wrapperCol={{ ...global.layout.wrapperCol, offset: 10 }}>
@@ -291,11 +300,14 @@ function Property() {
             bordered={true}
             dataSource={data}
             loading={loading}
+            pagination={{
+              total: data.length,
+              showTotal: (total, range) =>
+                `${range[0]}-${range[1]} of ${total} items`
+            }}
           />
         </Card>
       </div>
     </div>
   );
 }
-
-export default Property;

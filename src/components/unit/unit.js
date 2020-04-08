@@ -8,12 +8,13 @@ import {
   Drawer,
   Button,
   Card,
-  Select
+  Select,
+  Tag,
 } from "antd";
 import axios from "axios";
 import { PlusOutlined } from "@ant-design/icons";
 
-function Unit() {
+export default function Unit() {
   const [from] = Form.useForm();
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState([]);
@@ -24,37 +25,71 @@ function Unit() {
   const [propertyDropdownLoading, SetPropertyDropdownLoading] = useState(true);
   const [unitObj, setunitObj] = useState([]);
   const [unitDropdownLoading, SetunitDropdownLoading] = useState(false);
-   
+
   const columns = [
     {
       title: "Property Name",
       dataIndex: "propertyName",
-      key: "propertyName"
+      key: "propertyName",
+      ellipsis: true,
+      width: 200,
+      sorter: (a, b) => global.customSort(a.propertyName, b.propertyName),
+      sortDirections: ["ascend", "descend"],
+    },
+    {
+      title: "Unit Type",
+      dataIndex: "unitType",
+      key: "unitType",
+      width: 200,
+      ellipsis: true,
+      sorter: (a, b) => global.customSort(a.unitType, b.unitType),
+      sortDirections: ["ascend", "descend"],
     },
     {
       title: "Unit Name",
       dataIndex: "unitName",
-      key: "unitName"
-    },
-
-    {
-      title: "Unit Type",
-      dataIndex: "unitType",
-      key: "unitType"
+      key: "unitName",
+      width: 200,
+      ellipsis: true,
+      sorter: (a, b) => global.customSort(a.unitName, b.unitName),
+      sortDirections: ["ascend", "descend"],
     },
     {
       title: "Area (in Sq.ft)",
       dataIndex: "areaInSqft",
-      key: "areaInSqft"
+      key: "areaInSqft",
+      ellipsis: true,
+      width: 110,
+      sorter: (a, b) => global.customSort(a.areaInSqft, b.areaInSqft),
+      sortDirections: ["ascend", "descend"],
     },
     {
       title: "Description",
       dataIndex: "description",
-      key: "description"
+      key: "description",
+      ellipsis: true,
+      sorter: (a, b) => global.customSort(a.description, b.description),
+      sortDirections: ["ascend", "descend"],
+    },
+    {
+      title: "Status",
+      dataIndex: "occupied",
+      key: "occupied",
+      render: (occupied) =>
+        occupied == 1 ? (
+          <span>
+            <Tag style={{width:'70px',textAlign:"center"}} color="#67bf4e">Occupied</Tag>
+          </span>
+        ) : (
+          <span>
+            <Tag style={{width:'70px',textAlign:"center"}} color="#f7af19">Vacant</Tag>
+          </span>
+        ),
     },
     {
       title: "Action",
       dataIndex: "Action",
+      width: 110,
       render: (text, record) =>
         data.length >= 1 ? (
           <span>
@@ -71,11 +106,12 @@ function Unit() {
           <span>
             <a onClick={() => handleEdit(record.key)}>Edit</a>
           </span>
-        )
-    }
+        ),
+    },
   ];
 
   const addUnit = () => {
+    from.resetFields();
     setUpdate(false);
     setVisible(true);
     setEditingKey("");
@@ -86,84 +122,98 @@ function Unit() {
     from.resetFields();
   };
 
-  const handleAdd = values => {
+  const handleAdd = (values) => {
     setVisible(false);
     if (update) {
       message.loading({ content: "Updating Property", key: "Unit" });
       axios
         .put(`${global.url}/api/Unit/${editingKey}`, values)
-        .then(function(response) {
+        .then(function (response) {
           var editData = response.data;
           editData.key = parseInt(response.data.id);
           delete editData.id;
+          editData.propertyName = propertyObj.find(
+            (item) => item.key == editData.propertyID
+          ).propertyName;
+          editData.unitType = unitObj.find(
+            (item) => item.key == editData.unitTypeID
+          ).unitType;
+          console.log(data);
+          console.log(editData);
           const newData = [...data];
-          const index = newData.findIndex(item => editData.key === item.key);
+          const index = newData.findIndex((item) => editData.key === item.key);
           const item = newData[index];
           newData.splice(index, 1, { ...item, ...editData });
           setData(newData);
           message.success({
             content: "Unit Updated successfully!",
             key: "Unit",
-            duration: 3
+            duration: 3,
           });
         })
-        .catch(function(error) {
+        .catch(function (error) {
           message.error({
             content: "Failed to Update Property!",
             key: "Property",
-            duration: 3
+            duration: 3,
           });
         });
     } else {
       message.loading({ content: "Adding Unit", key: "Unit" });
       axios
         .post(`${global.url}/api/unit`, values)
-        .then(function(response) {
+        .then(function (response) {
           var addedData = response.data;
           addedData.key = response.data.id;
           delete addedData.id;
+          addedData.propertyName = propertyObj.find(
+            (item) => item.key == addedData.propertyID
+          ).propertyName;
+          addedData.unitType = unitObj.find(
+            (item) => item.key == addedData.unitTypeID
+          ).unitType;
           setData(data.concat(addedData));
           message.success({
             content: "Unit Added successfully!",
             key: "Unit",
-            duration: 3
+            duration: 3,
           });
         })
-        .catch(function(error) {
+        .catch(function (error) {
           message.error({
             content: "Failed to Add Unit!",
             key: "Unit",
-            duration: 3
+            duration: 3,
           });
         });
     }
   };
 
-  const handleEdit = id => {
-    var editData = data.filter(item => item.key == id);
+  const handleEdit = (id) => {
+    var editData = data.filter((item) => item.key == id);
     setEditingKey(editData[0].key);
     setVisible(true);
     setUpdate(true);
     from.setFieldsValue(editData[0]);
   };
 
-  const handleDelete = id => {
-    message.loading({ content: "Deleting Property", key: "Property" });
+  const handleDelete = (id) => {
+    message.loading({ content: "Deleting Unit", key: "Unit" });
     axios
-      .delete(`${global.url}/api/property/${id}`)
-      .then(function(response) {
-        setData(data.filter(item => item.key != id));
+      .delete(`${global.url}/api/unit/${id}`)
+      .then(function (response) {
+        setData(data.filter((item) => item.key != id));
         message.success({
-          content: "Property deleted successfully!",
-          key: "Property",
-          duration: 3
+          content: "Unit deleted successfully!",
+          key: "Unit",
+          duration: 3,
         });
       })
-      .catch(function(error) {
+      .catch(function (error) {
         message.error({
           content: "Failed to Delete Property!",
           key: "Property",
-          duration: 3
+          duration: 3,
         });
       });
   };
@@ -171,38 +221,37 @@ function Unit() {
   const getUnitList = () => {
     axios
       .get(`${global.url}/api/unit`)
-      .then(function(response) {
+      .then(function (response) {
         setLoading(false);
-        console.log(response.data);
         setData(response.data);
       })
-      .catch(function(error) {
+      .catch(function (error) {
         message.error({
           content: "Failed to Load Unit List!",
           key: "Unit",
-          duration: 3
+          duration: 3,
         });
       });
   };
 
   const getUnitType = () => {
     axios
-      .get(`${global.url}/api/utils/unitType`)
-      .then(function(response) {
+      .get(`${global.url}/api/utils/lu/unitType`)
+      .then(function (response) {
         SetunitDropdownLoading(false);
-        setunitObj(response.data)
+        setunitObj(response.data);
       })
-      .catch(function(error) {});
+      .catch(function (error) {});
   };
 
   const getProperty = () => {
     axios
       .get(`${global.url}/api/property`)
-      .then(function(response) {
+      .then(function (response) {
         SetPropertyDropdownLoading(false);
         setPropertyObj(response.data);
       })
-      .catch(function(error) {});
+      .catch(function (error) {});
   };
 
   useEffect(() => {
@@ -231,7 +280,6 @@ function Unit() {
         >
           <Form
             {...global.layout}
-            name="nest-messages"
             onFinish={handleAdd}
             form={from}
             name="unit"
@@ -239,9 +287,7 @@ function Unit() {
           >
             <Form.Item
               name="propertyID"
-              label="Propery Name"
-              labelAlign="left"
-              colon={false}
+              label="Property Name"
               rules={[{ required: true }]}
             >
               <Select
@@ -253,10 +299,10 @@ function Unit() {
                   0
                 }
               >
-                {propertyObj.map(function(item, index) {
+                {propertyObj.map(function (item, index) {
                   return (
                     <Select.Option key={item.key} value={item.key}>
-                      {item.name}
+                      {item.propertyName}
                     </Select.Option>
                   );
                 })}
@@ -266,8 +312,6 @@ function Unit() {
               name="unitName"
               label="Unit Name"
               rules={[{ required: true }]}
-              labelAlign="left"
-              colon={false}
             >
               <Input />
             </Form.Item>
@@ -275,8 +319,6 @@ function Unit() {
               name="unitTypeID"
               label="Unit Type"
               rules={[{ required: true }]}
-              labelAlign="left"
-              colon={false}
             >
               <Select
                 loading={unitDropdownLoading}
@@ -287,29 +329,19 @@ function Unit() {
                   0
                 }
               >
-                {unitObj.map(function(item, index) {
+                {unitObj.map(function (item, index) {
                   return (
                     <Select.Option key={item.key} value={item.key}>
-                      {item.Name}
+                      {item.unitType}
                     </Select.Option>
                   );
                 })}
               </Select>
             </Form.Item>
-            <Form.Item
-              name="areaInSqft"
-              label="Area (in Sq. ft)"
-              labelAlign="left"
-              colon={false}
-            >
+            <Form.Item name="areaInSqft" label="Area (in Sq. ft)">
               <Input />
             </Form.Item>
-            <Form.Item
-              name="description"
-              labelAlign="left"
-              colon={false}
-              label="Description"
-            >
+            <Form.Item name="description" label="Description">
               <Input.TextArea />
             </Form.Item>
             <Form.Item wrapperCol={{ ...global.layout.wrapperCol, offset: 10 }}>
@@ -323,7 +355,7 @@ function Unit() {
           </Form>
         </Drawer>
         <Card
-          title="Property List"
+          title="Unit List"
           style={{ width: "100%" }}
           headStyle={{ padding: " 0 16px" }}
           bodyStyle={{ padding: 0 }}
@@ -333,11 +365,14 @@ function Unit() {
             bordered={true}
             dataSource={data}
             loading={loading}
+            pagination={{
+              total: data.length,
+              showTotal: (total, range) =>
+                `${range[0]}-${range[1]} of ${total} items`,
+            }}
           />
         </Card>
       </div>
     </div>
   );
 }
-
-export default Unit;

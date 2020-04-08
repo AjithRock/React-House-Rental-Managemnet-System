@@ -66,3 +66,25 @@ CREATE TABLE  tblUnit (
 )  ENGINE=INNODB;
 
 
+CREATE TABLE home.tblTenant (
+    TenantID INT AUTO_INCREMENT,
+    TenantName VARCHAR(50) NOT NULL,
+    Age int null,
+    GenderID Int NOt NULL,
+    FOREIGN KEY (GenderID) REFERENCES refgender(GenderID),
+    OccupationID Int NOt NULL,
+    FOREIGN KEY (OccupationID) REFERENCES refoccupation(OccupationID),
+    DateOfBirth date null,
+    ContactNumber VARCHAR(20),
+    Email VARCHAR(100),
+    Deleted bit NOT NULL DEFAULT 0,
+	CreationDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	CreatedBy INT NUll,
+	UpdatedDate	TIMESTAMP NULL, 
+	UpdatedBy INT NULL,
+	DeletedDate TIMESTAMP NULL,
+	DeletedBy INT null,
+	CONSTRAINT tblTenant_pk PRIMARY KEY (TenantID)
+)  ENGINE=INNODB;
+
+

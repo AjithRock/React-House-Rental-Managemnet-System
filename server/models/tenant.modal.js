@@ -2,27 +2,37 @@
 
 const sql = require("../config/db");
 // constructor
-const Property = function (property) {
-  this.propertyName = property.propertyName;
-  this.address = property.address;
-  this.city = property.city;
-  this.state = property.state;
-  this.zip = property.zip;
-  this.country = property.country;
-  this.description = property.description;
+const Tenant = function (tenant) {
+  this.propertyID = tenant.propertyID;
+  this.unitID = tenant.unitID;
+  this.tenantName = tenant.tenantName;
+  this.genderID = tenant.genderID;
+  this.age = tenant.age;
+  this.dateOfBirth =
+    typeof tenant.dateOfBirth !== "undefined"
+      ? tenant.dateOfBirth.slice(0, 10)
+      : tenant.dateOfBirth;
+  this.occupationID = tenant.occupationID;
+  this.religionID = tenant.religionID;
+  this.contactNumber = tenant.contactNumber;
+  this.email = tenant.email;
+  this.proofType = tenant.proofType;
+  this.proofNumber = tenant.proofNumber;
+  this.description = tenant.description;
 };
 
-Property.create = (newProperty, result) => {
-  sql.query("INSERT INTO tblProperty SET ?", newProperty, (err, res) => {
+Tenant.create = (newTenant, result) => {
+  sql.query("INSERT INTO tbltenant SET ?", newTenant, (err, res) => {
     if (err) {
+      console.log(err);
       result(err, null);
       return;
     }
-    result(null, { id: res.insertId, ...newProperty });
+    result(null, { tenantID: res.insertId, ...newTenant });
   });
 };
 
-Property.getAll = (result) => {
+Tenant.getAll = (result) => {
   sql.query(
     "SELECT PropertyID as 'key',propertyName, address, country, city,  state,  zip, description FROM tblProperty WHERE Deleted = 0",
     (err, res) => {
@@ -35,7 +45,7 @@ Property.getAll = (result) => {
   );
 };
 
-Property.findById = (PropertyId, result) => {
+Tenant.findById = (PropertyId, result) => {
   sql.query(
     `SELECT PropertyID as 'key',PropertyName, Address, Country, City,  State,  Zip, Description, CreationDate FROM tblProperty WHERE PropertyID = ${PropertyId}`,
     (err, res) => {
@@ -47,23 +57,22 @@ Property.findById = (PropertyId, result) => {
         result(null, res[0]);
         return;
       }
-      // not found Customer with the id
       result({ kind: "not_found" }, null);
     }
   );
 };
 
-Property.updateById = (id, property, result) => {
+Tenant.updateById = (id, tenant, result) => {
   sql.query(
     "UPDATE tblproperty SET PropertyName = ?, address = ? , City = ?, state = ?, zip = ?,country = ?, description = ?, UpdatedDate = CURRENT_TIMESTAMP WHERE PropertyID = ?",
     [
-      property.propertyName,
-      property.address,
-      property.city,
-      property.state,
-      property.zip,
-      property.country,
-      property.description,
+      tenant.propertyName,
+      tenant.address,
+      tenant.city,
+      tenant.state,
+      tenant.zip,
+      tenant.country,
+      tenant.description,
       id,
     ],
     (err, res) => {
@@ -76,14 +85,16 @@ Property.updateById = (id, property, result) => {
         result({ kind: "not_found" }, null);
         return;
       }
-      result(null, { id: id, ...property });
+
+      console.log("updated tenant: ", { id: id, ...tenant });
+      result(null, { id: id, ...tenant });
     }
   );
 };
 
-Property.remove = (id, result) => {
+Tenant.remove = (id, result) => {
   sql.query(
-    "Update tblProperty set Deleted = 1,DeletedDate = CURRENT_TIMESTAMP WHERE PropertyID = ? ",
+    "Update tblProperty set Deleted = 1 ,DeletedDate = CURRENT_TIMESTAMPWHERE PropertyID = ?",
     id,
     (err, res) => {
       if (err) {
@@ -94,9 +105,10 @@ Property.remove = (id, result) => {
         result({ kind: "not_found" }, null);
         return;
       }
-      result(err, null);
+
+      result(null, res);
     }
   );
 };
 
-module.exports = Property;
+module.exports = Tenant;

@@ -2,16 +2,25 @@
 
 const sql = require("../config/db");
 // constructor
-const Unit = function(unit) {
+const Unit = function (unit) {
   this.propertyID = unit.propertyID;
   this.unitName = unit.unitName;
   this.unitTypeID = unit.unitTypeID;
   this.areaInSqft = unit.areaInSqft;
   this.description = unit.description;
+  this.unitID = unit.unitID;
+  this.tenantID = unit.tenantID;
+  this.occupied = unit.occupied;
+  this.moveInDate =
+    typeof unit.moveInDate !== "undefined"
+      ? unit.moveInDate.slice(0, 10)
+      : unit.moveInDate;
 };
 
 Unit.create = (newUnit, result) => {
-  console.log(newUnit);
+  Object.keys(newUnit).forEach((key) =>
+    newUnit[key] === undefined ? delete newUnit[key] : {}
+  );
   sql.query("INSERT INTO tblUnit SET ?", newUnit, (err, res) => {
     if (err) {
       result(err, null);
@@ -21,9 +30,41 @@ Unit.create = (newUnit, result) => {
   });
 };
 
-Unit.getAll = result => {
+Unit.createUnitOccupancy = (unitOccupancy, result) => {
+  Object.keys(unitOccupancy).forEach((key) =>
+    unitOccupancy[key] === undefined ? delete unitOccupancy[key] : {}
+  );
+  sql.query("INSERT INTO tblUnitOccupancy SET ?", unitOccupancy, (err, res) => {
+    if (err) {
+      result(err, null);
+      return;
+    }
+    result(null, { occLineID: res.insertId, ...unitOccupancy });
+  });
+};
+
+Unit.getAll = (result) => {
   sql.query(
-    "SELECT U.UnitID as 'key',U.unitName, U.unitTypeID, UT.name AS 'unitType', U.propertyID,P.name AS 'propertyName', U.areaInSqft, U.description FROM tblunit AS U  INNER JOIN luUnittype AS UT ON UT.ID = U.UnitTypeID  INNER JOIN tblproperty AS P ON P.ID = U.propertyID  WHERE U.Deleted = 0",
+    `select
+      U.UnitID as 'key',
+      U.unitName,
+      U.unitTypeID,
+      UT.UnitType as 'unitType',
+      U.propertyID,
+      P.propertyName ,
+      U.areaInSqft,
+      U.description,
+      IFNULL(UO.occupied,0) as 'occupied'
+    from
+      tblunit as U
+    inner join luUnittype as UT on
+      UT.UnitTypeID = U.UnitTypeID
+    inner join tblproperty as P on
+      P.propertyID = U.propertyID
+    left join tblunitoccupancy as UO on
+      UO.UnitID = U.UnitID
+    where
+      U.Deleted = 0`,
     (err, res) => {
       if (err) {
         result(null, err);
@@ -34,9 +75,58 @@ Unit.getAll = result => {
   );
 };
 
-Unit.findById = (PropertyId, result) => {
+Unit.getAllByProperty = (propertyID, result) => {
   sql.query(
-    `SELECT ID as 'key',Name, Address, Country, City,  State,  Zip, Description, CreationDate FROM tblProperty WHERE id = ${PropertyId}`,
+    `select
+      U.UnitID as 'key',
+      U.unitName,
+      U.unitTypeID,
+      UT.UnitType as 'unitType',
+      U.propertyID,
+      P.propertyName ,
+      U.areaInSqft,
+      U.description,
+      IFNULL(UO.occupied,0) as 'occupied'
+    from
+      tblunit as U
+    inner join luUnittype as UT on
+      UT.UnitTypeID = U.UnitTypeID
+    inner join tblproperty as P on
+      P.propertyID = U.propertyID
+    left join tblunitoccupancy as UO on
+      UO.UnitID = U.UnitID
+    where
+      U.Deleted = 0 and P.PropertyID =${propertyID}`,
+    (err, res) => {
+      if (err) {
+        result(null, err);
+        return;
+      }
+      result(null, res);
+    }
+  );
+};
+
+Unit.findById = (unitId, result) => {
+  sql.query(
+    `select
+      U.UnitID as 'key',
+      U.unitName,
+      U.unitTypeID,
+      UT.UnitType as 'unitType',
+      U.propertyID,
+      P.oropertyName ,
+      U.areaInSqft,
+      U.description
+    from
+      tblunit as U
+    inner join luUnittype as UT on
+      UT.UnitTypeID = U.UnitTypeID
+    inner join tblproperty as P on
+      P.propertyID = U.propertyID
+    where
+      U.Deleted = 0
+      and U.UnitID = ${unitId}`,
     (err, res) => {
       if (err) {
         result(err, null);
@@ -46,7 +136,6 @@ Unit.findById = (PropertyId, result) => {
         result(null, res[0]);
         return;
       }
-      // not found Customer with the id
       result({ kind: "not_found" }, null);
     }
   );
@@ -54,16 +143,24 @@ Unit.findById = (PropertyId, result) => {
 
 Unit.updateById = (id, unit, result) => {
   sql.query(
-    "UPDATE tblproperty SET name = ?, address = ? , City = ?, state = ?, zip = ?,country = ?, description = ?, UpdatedDate = CURRENT_TIMESTAMP WHERE id = ?",
+    `update
+      tblUnit
+    set
+      propertyID = ?,
+      unitName = ? ,
+      unitTypeID = ?,
+      areaInSqft = ?,
+      description = ?,
+      UpdatedDate = current_timestamp
+    where
+      UnitID = ?`,
     [
-      unit.name,
-      unit.address,
-      unit.city,
-      unit.state,
-      unit.zip,
-      unit.country,
+      unit.propertyID,
+      unit.unitName,
+      unit.unitTypeID,
+      unit.areaInSqft,
       unit.description,
-      id
+      id,
     ],
     (err, res) => {
       if (err) {
@@ -71,34 +168,37 @@ Unit.updateById = (id, unit, result) => {
         result(null, err);
         return;
       }
-
       if (res.affectedRows == 0) {
-        // not found Customer with the id
         result({ kind: "not_found" }, null);
         return;
       }
-
-      console.log("updated unit: ", { id: id, ...unit });
       result(null, { id: id, ...unit });
     }
   );
 };
 
 Unit.remove = (id, result) => {
-  sql.query("DELETE FROM tblProperty WHERE id = ?", id, (err, res) => {
-    if (err) {
-      result(null, err);
-      return;
+  sql.query(
+    `update
+      tblUnit
+    set
+      Deleted = 1 ,
+      DeletedDate = current_timestamp
+    where
+      unitID = ?`,
+    id,
+    (err, res) => {
+      if (err) {
+        result(null, err);
+        return;
+      }
+      if (res.affectedRows == 0) {
+        result({ kind: "not_found" }, null);
+        return;
+      }
+      result(null, res);
     }
-
-    if (res.affectedRows == 0) {
-      // not found Customer with the id
-      result({ kind: "not_found" }, null);
-      return;
-    }
-
-    result(null, res);
-  });
+  );
 };
 
 module.exports = Unit;

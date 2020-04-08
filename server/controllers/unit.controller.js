@@ -47,24 +47,42 @@ exports.findAll = (req, res) => {
   });
 };
 
-// Find a single Unit with a propertyId
-exports.findOne = (req, res) => {
-  Unit.findById(req.params.propertyId, (err, data) => {
+exports.findAllByProperty = (req, res) => {
+  Unit.getAllByProperty(req.params.propertyId, (err, data) => {
     if (err) {
       if (err.kind === "not_found") {
         res.status(404).send({
-          message: `Not found Unit with id ${req.params.propertyId}.`
+          message: `Not found Unit with id ${req.params.unitId}.`
         });
       } else {
         res.status(500).send({
-          message: `Error retrieving Unit with id ${req.params.propertyId}.`
+          message: `Error retrieving Unit with id ${req.params.unitId}.`
         });
       }
     } else res.send(data);
   });
 };
 
-// Update a Unit identified by the propertyId in the request
+
+
+// Find a single Unit with a unitId
+exports.findOne = (req, res) => {
+  Unit.findById(req.params.unitId, (err, data) => {
+    if (err) {
+      if (err.kind === "not_found") {
+        res.status(404).send({
+          message: `Not found Unit with id ${req.params.unitId}.`
+        });
+      } else {
+        res.status(500).send({
+          message: `Error retrieving Unit with id ${req.params.unitId}.`
+        });
+      }
+    } else res.send(data);
+  });
+};
+
+// Update a Unit identified by the unitId in the request
 exports.update = (req, res) => {
   // Validate Request
   if (
@@ -78,17 +96,17 @@ exports.update = (req, res) => {
   }
 
   Unit.updateById(
-    req.params.propertyId,
+    req.params.unitId,
     new Unit(req.body),
     (err, data) => {
       if (err) {
         if (err.kind === "not_found") {
           res.status(404).send({
-            message: `Not found Customer with id ${req.params.propertyId}.`
+            message: `Not found Unit with id ${req.params.unitId}.`
           });
         } else {
             res.status(500).send({
-              message: `Error updating Unit with id ${req.params.propertyId}.`
+              message: `Error updating Unit with id ${req.params.unitId}.`
             });
           }
       } else res.send(data);
@@ -96,17 +114,17 @@ exports.update = (req, res) => {
   );
 };
 
-// Delete a Unit with the specified propertyId in the request
+// Delete a Unit with the specified unitId in the request
 exports.delete = (req, res) => {
-    Unit.remove(req.params.propertyId, (err, data) => {
+    Unit.remove(req.params.unitId, (err, data) => {
       if (err) {
         if (err.kind === "not_found") {
           res.status(404).send({
-            message: `Not found Unit with id ${req.params.propertyId}.`
+            message: `Not found Unit with id ${req.params.unitId}.`
           });
         } else {
           res.status(500).send({
-            message: `Could not delete Unit with id ${req.params.propertyId}`
+            message: `Could not delete Unit with id ${req.params.unitId}`
           });
         }
       } else res.send({ message: `Unit was deleted successfully!`});

@@ -1,17 +1,9 @@
 import React from "react";
 
-function Admin() {
+export default function Admin() {
   return (
-    <div
-      style={{
-        padding: 24,
-        background: "#fff",
-        minHeight: 360
-      }}
-    >
-      Admin
+    <div className="header-div">
+      <h1 className="header-title">Admin</h1>
     </div>
   );
 }
-
-export default Admin;

@@ -5,6 +5,7 @@ import Dashboard from "./components/dashboard/dashboard";
 import Property from "./components/property/property";
 import Unit from "./components/unit/unit";
 import Tenant from "./components/tenant/tenant";
+import Payment from "./components/payment/payment";
 import Report from "./components/report/report";
 import Admin from "./components/admin/admin";
 import PageNotFound from "./PageNotFound";
@@ -17,12 +18,13 @@ import {
   UserOutlined,
   ShopOutlined,
   HomeOutlined,
-  DashboardOutlined
+  CarryOutOutlined,
+  PieChartOutlined,
 } from "@ant-design/icons";
 
 const { Header, Content, Footer, Sider } = Layout;
 
-const LogoutDiv = data => (
+const LogoutDiv = (data) => (
   <div className="user-logoutPanel">
     <div className="user-detail">
       <Avatar size={60} src={data.avatar} />
@@ -42,13 +44,13 @@ class App extends React.Component {
     userData: {
       username: "Admin User",
       email: "adminuser@admin.com",
-      avatar: "src/assets/image/147133.png"
-    }
+      avatar: "src/assets/image/147133.png",
+    },
   };
 
   toggle = () => {
     this.setState({
-      collapsed: !this.state.collapsed
+      collapsed: !this.state.collapsed,
     });
   };
 
@@ -57,7 +59,7 @@ class App extends React.Component {
       <Router>
         <Layout
           style={{
-            minHeight: "100vh"
+            minHeight: "100vh",
           }}
         >
           <Sider
@@ -65,7 +67,7 @@ class App extends React.Component {
               overflow: "auto",
               height: "100vh",
               position: "fixed",
-              left: 0
+              left: 0,
             }}
             trigger={null}
             collapsible
@@ -74,7 +76,7 @@ class App extends React.Component {
             <div className="logo" />
             <Menu theme="dark" defaultSelectedKeys={["1"]} mode="inline">
               <Menu.Item key="1">
-                <DashboardOutlined />
+                <PieChartOutlined />
                 <span> Dashboard </span> <Link to="/"></Link>
               </Menu.Item>
               <Menu.Item key="2">
@@ -90,10 +92,14 @@ class App extends React.Component {
                 <span>Tenant</span> <Link to="/Tenant"></Link>
               </Menu.Item>
               <Menu.Item key="5">
+                <CarryOutOutlined />
+                <span>Payment</span> <Link to="/Payment"></Link>
+              </Menu.Item>
+              <Menu.Item key="6">
                 <FileDoneOutlined />
                 <span>Report</span> <Link to="/Report"></Link>
               </Menu.Item>
-              <Menu.Item key="6">
+              <Menu.Item key="7">
                 <SettingOutlined />
                 <span>Admin</span> <Link to="/Admin"></Link>
               </Menu.Item>
@@ -116,7 +122,7 @@ class App extends React.Component {
                 zIndex: 1,
                 width: this.state.collapsed
                   ? "calc(100% - 80px)"
-                  : "calc(100% - 200px)"
+                  : "calc(100% - 200px)",
               }}
             >
               <MenuOutlined
@@ -139,7 +145,7 @@ class App extends React.Component {
                     style={{
                       float: "right",
                       margin: "16px 10px",
-                      cursor: "pointer"
+                      cursor: "pointer",
                     }}
                     src={UserAvatar}
                   />
@@ -149,7 +155,7 @@ class App extends React.Component {
             <Content
               className="app-container"
               style={{
-                marginLeft: this.state.collapsed ? 80 : 200
+                marginLeft: this.state.collapsed ? 80 : 200,
               }}
             >
               <Switch>
@@ -157,6 +163,7 @@ class App extends React.Component {
                 <Route path="/Property" component={Property} />
                 <Route path="/Unit" component={Unit} />
                 <Route path="/Tenant" component={Tenant} />
+                <Route path="/Payment" component={Payment} />
                 <Route path="/Report" component={Report} />
                 <Route path="/Admin" component={Admin} />
                 <Route path="*" component={PageNotFound} />
@@ -166,7 +173,7 @@ class App extends React.Component {
               style={{
                 textAlign: "center",
                 marginLeft: this.state.collapsed ? 80 : 200,
-                transition: "all 0.2s"
+                transition: "all 0.2s",
               }}
             >
               Sweet Home {new Date().getFullYear()}

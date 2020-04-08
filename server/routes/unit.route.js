@@ -8,6 +8,9 @@ module.exports = app => {
   app.get("/api/unit", unit.findAll);
 
   // Retrieve a single unit with unitId
+  app.get("/api/unit/:propertyId", unit.findAllByProperty);
+
+  // Retrieve a single unit with unitId
   app.get("/api/unit/:unitId", unit.findOne);
 
   // Update a unit with unitId

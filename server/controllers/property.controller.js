@@ -17,7 +17,7 @@ exports.create = (req, res) => {
 
   // Create a Property
   const property = new Property({
-    name: req.body.name,
+    propertyName: req.body.propertyName,
     address: req.body.address,
     city: req.body.city,
     state: req.body.state,
@@ -43,7 +43,7 @@ exports.findAll = (req, res) => {
     if (err)
       res.status(500).send({
         message:
-          err.message || "Some error occurred while retrieving customers."
+          err.message || "Some error occurred while retrieving Property."
       });
     else res.send(data);
   });
@@ -86,7 +86,7 @@ exports.update = (req, res) => {
       if (err) {
         if (err.kind === "not_found") {
           res.status(404).send({
-            message: `Not found Customer with id ${req.params.propertyId}.`
+            message: `Not found Property with id ${req.params.propertyId}.`
           });
         } else {
             res.status(500).send({

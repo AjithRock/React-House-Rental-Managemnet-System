@@ -8,7 +8,6 @@ function PageNotFound() {
     history.push("/");
   }
   return (
-    <div className="main-container">
       <Result
         status="404"
         title="404"
@@ -19,7 +18,6 @@ function PageNotFound() {
           </Button>
         }
       />
-    </div>
   );
 }
 

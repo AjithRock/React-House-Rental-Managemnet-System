@@ -3,8 +3,8 @@
 const Utils = require("../models/utils.modal");
 
 // Retrieve all Utils from the database.
-exports.getAllUnitType = (req, res) => {
-  Utils.getAllUnitType((err, data) => {
+exports.getAll = (req, res) => {
+  Utils.getAll(req.params,(err, data) => {
     if (err)
       res.sendStatus(500).send({
         message:

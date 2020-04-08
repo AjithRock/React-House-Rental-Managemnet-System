@@ -10,6 +10,19 @@ global.layout = {
   wrapperCol: { span: 18 }
 };
 
+global.customSort = (a, b) => {
+  if (a > b) return 1;
+  if (b > a) return -1;
+  return 0;
+};
+
+global.checkNumber = (rule, value) => {
+  if (!isNaN(value)) {
+    return Promise.resolve();
+  }
+  return Promise.reject('Please enter a number!');
+};
+
 global.validateMessages = {
   required: "This field is required!"
 };

@@ -1,18 +1,9 @@
 import React from "react";
 
-
-function Report() {
+export default function Report() {
   return (
-    <div
-      style={{
-        padding: 24,
-        background: "#fff",
-        minHeight: 360
-      }}
-    >
-      Report
+    <div className="header-div">
+      <h1 className="header-title">Report</h1>
     </div>
   );
 }
-
-export default Report;
