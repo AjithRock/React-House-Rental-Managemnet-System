@@ -10,11 +10,10 @@ module.exports = app => {
   // Retrieve a single unit with unitId
   app.get("/api/unit/:propertyId", unit.findAllByProperty);
 
-  // Retrieve a single unit with unitId
-  app.get("/api/unit/:unitId", unit.findOne);
-
   // Update a unit with unitId
   app.put("/api/unit/:unitId", unit.update);
+
+  // app.patch("/api/unit/:unitId", unit.update);
 
   // Delete a unit with unitId
   app.delete("/api/unit/:unitId", unit.delete);

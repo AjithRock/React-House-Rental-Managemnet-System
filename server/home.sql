@@ -88,3 +88,20 @@ CREATE TABLE home.tblTenant (
 )  ENGINE=INNODB;
 
 
+CREATE TABLE home.tblPayment (
+    PaymenID INT AUTO_INCREMENT,
+    BillingID INT NOT NULL,
+    TenantID INT NOT NULL,
+    UnitID INT NOT NULL,
+    PaymentType INT NOT NULL,
+    PaymentDate	TIMESTAMP NOT NULL, 
+    Deleted bit NOT NULL DEFAULT 0,
+	CreationDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	CreatedBy INT NUll,
+	UpdatedDate	TIMESTAMP NULL, 
+	UpdatedBy INT NULL,
+	DeletedDate TIMESTAMP NULL,
+	DeletedBy INT null,
+	CONSTRAINT tblPayment_pk PRIMARY KEY (PaymenID)
+)  ENGINE=INNODB;
+

@@ -11,10 +11,7 @@ const Unit = function (unit) {
   this.unitID = unit.unitID;
   this.tenantID = unit.tenantID;
   this.occupied = unit.occupied;
-  this.moveInDate =
-    typeof unit.moveInDate !== "undefined"
-      ? unit.moveInDate.slice(0, 10)
-      : unit.moveInDate;
+  this.moveInDate = unit.moveInDate;
 };
 
 Unit.create = (newUnit, result) => {
@@ -39,32 +36,36 @@ Unit.createUnitOccupancy = (unitOccupancy, result) => {
       result(err, null);
       return;
     }
-    result(null, { occLineID: res.insertId, ...unitOccupancy });
+    result(null, { id: res.insertId, ...unitOccupancy });
   });
 };
 
 Unit.getAll = (result) => {
   sql.query(
     `select
-      U.UnitID as 'key',
-      U.unitName,
-      U.unitTypeID,
-      UT.UnitType as 'unitType',
-      U.propertyID,
-      P.propertyName ,
-      U.areaInSqft,
-      U.description,
-      IFNULL(UO.occupied,0) as 'occupied'
-    from
-      tblunit as U
-    inner join luUnittype as UT on
-      UT.UnitTypeID = U.UnitTypeID
-    inner join tblproperty as P on
-      P.propertyID = U.propertyID
-    left join tblunitoccupancy as UO on
-      UO.UnitID = U.UnitID
-    where
-      U.Deleted = 0`,
+    U.UnitID as 'key',
+    U.unitName,
+    U.unitTypeID,
+    UT.UnitType as 'unitType',
+    U.propertyID,
+    P.propertyName ,
+    U.areaInSqft,
+    U.description,
+    IFNULL(UO.occupied,	0) as 'occupied'
+  from
+    tblunit as U
+  inner join luUnittype as UT on
+    UT.UnitTypeID = U.UnitTypeID
+  inner join tblproperty as P on
+    P.propertyID = U.propertyID
+    and P.Deleted = 0
+  left join tblunitoccupancy as UO on
+    UO.UnitID = U.UnitID
+    and UO.Occupied != 0
+  where
+    U.Deleted = 0
+  order by
+    UO.Occupied asc`,
     (err, res) => {
       if (err) {
         result(null, err);
@@ -92,51 +93,18 @@ Unit.getAllByProperty = (propertyID, result) => {
     inner join luUnittype as UT on
       UT.UnitTypeID = U.UnitTypeID
     inner join tblproperty as P on
-      P.propertyID = U.propertyID
+      P.propertyID = U.propertyID AND P.Deleted = 0 
     left join tblunitoccupancy as UO on
       UO.UnitID = U.UnitID
     where
-      U.Deleted = 0 and P.PropertyID =${propertyID}`,
+      U.Deleted = 0 AND P.PropertyID =?`,
+    propertyID,
     (err, res) => {
       if (err) {
         result(null, err);
         return;
       }
       result(null, res);
-    }
-  );
-};
-
-Unit.findById = (unitId, result) => {
-  sql.query(
-    `select
-      U.UnitID as 'key',
-      U.unitName,
-      U.unitTypeID,
-      UT.UnitType as 'unitType',
-      U.propertyID,
-      P.oropertyName ,
-      U.areaInSqft,
-      U.description
-    from
-      tblunit as U
-    inner join luUnittype as UT on
-      UT.UnitTypeID = U.UnitTypeID
-    inner join tblproperty as P on
-      P.propertyID = U.propertyID
-    where
-      U.Deleted = 0
-      and U.UnitID = ${unitId}`,
-    (err, res) => {
-      if (err) {
-        result(err, null);
-        return;
-      }
-      if (res.length) {
-        result(null, res[0]);
-        return;
-      }
-      result({ kind: "not_found" }, null);
     }
   );
 };

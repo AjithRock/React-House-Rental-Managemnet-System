@@ -42,3 +42,29 @@ exports.create = (req, res) => {
     else res.send(data);
   });
 };
+
+exports.findAllByTenant = (req, res) => {
+  Billing.getAllByTenant(req.params.tenantId, (err, data) => {
+    if (err) {
+      if (err.kind === "not_found") {
+        res.status(404).send({
+          message: `Not found billing with id ${req.params.tenantId}.`,
+        });
+      } else {
+        res.status(500).send({
+          message: `Error retrieving billing with id ${req.params.tenantId}.`,
+        });
+      }
+    } else res.send(data);
+  });
+};
+
+exports.SyncBilling = (req, res) => {
+  Billing.createBillingTillDate((err, data) => {
+    if (err) {
+      res.status(404).send({
+        message: `Error In Creating Bill`,
+      });
+    } else res.send(data);
+  });
+};

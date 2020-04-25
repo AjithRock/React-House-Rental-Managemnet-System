@@ -63,25 +63,6 @@ exports.findAllByProperty = (req, res) => {
   });
 };
 
-
-
-// Find a single Unit with a unitId
-exports.findOne = (req, res) => {
-  Unit.findById(req.params.unitId, (err, data) => {
-    if (err) {
-      if (err.kind === "not_found") {
-        res.status(404).send({
-          message: `Not found Unit with id ${req.params.unitId}.`
-        });
-      } else {
-        res.status(500).send({
-          message: `Error retrieving Unit with id ${req.params.unitId}.`
-        });
-      }
-    } else res.send(data);
-  });
-};
-
 // Update a Unit identified by the unitId in the request
 exports.update = (req, res) => {
   // Validate Request

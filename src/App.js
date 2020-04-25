@@ -77,6 +77,7 @@ class App extends React.Component {
             <Menu theme="dark" defaultSelectedKeys={["1"]} mode="inline">
               <Menu.Item key="1">
                 <PieChartOutlined />
+                {/* <FontAwesomeIcon icon={faHeart} /> */}
                 <span> Dashboard </span> <Link to="/"></Link>
               </Menu.Item>
               <Menu.Item key="2">

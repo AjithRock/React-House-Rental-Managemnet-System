@@ -24,7 +24,19 @@ Property.create = (newProperty, result) => {
 
 Property.getAll = (result) => {
   sql.query(
-    "SELECT PropertyID as 'key',propertyName, address, country, city,  state,  zip, description FROM tblProperty WHERE Deleted = 0",
+    `select
+      PropertyID as 'key',
+      propertyName,
+      address,
+      country,
+      city,
+      state,
+      zip,
+      description
+    from
+      tblProperty
+    where
+      Deleted = 0`,
     (err, res) => {
       if (err) {
         result(err, null);
@@ -37,7 +49,21 @@ Property.getAll = (result) => {
 
 Property.findById = (PropertyId, result) => {
   sql.query(
-    `SELECT PropertyID as 'key',PropertyName, Address, Country, City,  State,  Zip, Description, CreationDate FROM tblProperty WHERE PropertyID = ${PropertyId}`,
+    `select
+      PropertyID as 'key',
+      PropertyName,
+      Address,
+      Country,
+      City,
+      State,
+      Zip,
+      Description,
+      CreationDate
+    from
+      tblProperty
+    where
+    Deleted = 0
+    PropertyID = ${PropertyId}`,
     (err, res) => {
       if (err) {
         result(err, null);
@@ -55,7 +81,15 @@ Property.findById = (PropertyId, result) => {
 
 Property.updateById = (id, property, result) => {
   sql.query(
-    "UPDATE tblproperty SET PropertyName = ?, address = ? , City = ?, state = ?, zip = ?,country = ?, description = ?, UpdatedDate = CURRENT_TIMESTAMP WHERE PropertyID = ?",
+    `UPDATE tblproperty 
+      SET PropertyName = ?,
+      address = ? ,
+      City = ?,
+      state = ?,
+      zip = ?,
+      country = ?,
+      description = ?,
+      UpdatedDate = CURRENT_TIMESTAMP WHERE PropertyID = ?`,
     [
       property.propertyName,
       property.address,
@@ -83,7 +117,9 @@ Property.updateById = (id, property, result) => {
 
 Property.remove = (id, result) => {
   sql.query(
-    "Update tblProperty set Deleted = 1,DeletedDate = CURRENT_TIMESTAMP WHERE PropertyID = ? ",
+    `Update tblProperty 
+      set Deleted = 1,
+      DeletedDate = CURRENT_TIMESTAMP WHERE PropertyID = ? `,
     id,
     (err, res) => {
       if (err) {

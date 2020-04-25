@@ -7,6 +7,9 @@ module.exports = app => {
   // Retrieve all tenants
   app.get("/api/tenant", tenant.findAll);
 
+   // Retrieve a single unit with unitId
+   app.get("/api/tenant/:unitId", tenant.findAllByUnit);
+
   // Retrieve a single tenant with tenantId
   app.get("/api/tenant/:tenantId", tenant.findOne);
 

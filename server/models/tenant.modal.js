@@ -8,10 +8,7 @@ const Tenant = function (tenant) {
   this.tenantName = tenant.tenantName;
   this.genderID = tenant.genderID;
   this.age = tenant.age;
-  this.dateOfBirth =
-    typeof tenant.dateOfBirth !== "undefined"
-      ? tenant.dateOfBirth.slice(0, 10)
-      : tenant.dateOfBirth;
+  this.dateOfBirth = tenant.dateOfBirth;
   this.occupationID = tenant.occupationID;
   this.religionID = tenant.religionID;
   this.contactNumber = tenant.contactNumber;
@@ -22,19 +19,78 @@ const Tenant = function (tenant) {
 };
 
 Tenant.create = (newTenant, result) => {
+  Object.keys(newTenant).forEach((key) =>
+    newTenant[key] === undefined ? delete newTenant[key] : {}
+  );
   sql.query("INSERT INTO tbltenant SET ?", newTenant, (err, res) => {
     if (err) {
       console.log(err);
       result(err, null);
       return;
     }
-    result(null, { tenantID: res.insertId, ...newTenant });
+    result(null, { id: res.insertId, ...newTenant });
   });
 };
 
 Tenant.getAll = (result) => {
   sql.query(
-    "SELECT PropertyID as 'key',propertyName, address, country, city,  state,  zip, description FROM tblProperty WHERE Deleted = 0",
+    `select
+      tenantID as 'key',
+      tenantName Age,
+      GenderID,
+      OccupationID,
+      ReligionID,
+      DateOfBirth,
+      ContactNumber,
+      ProofType,
+      ProofNumber,
+      Email,
+      Description,
+      ActiveIND,
+      UnitID,
+      PropertyID,
+      CreationDate
+    from
+      tbltenant
+    where
+      Deleted = 0
+    `,
+    (err, res) => {
+      if (err) {
+        result(err, null);
+        return;
+      }
+      result(null, res);
+    }
+  );
+};
+
+Tenant.getAllByUnit = (tenantID, result) => {
+  sql.query(
+    `select
+      tenantID as 'key',
+      tenantName, 
+      Age,
+      genderID,
+      occupationID,
+      religionID,
+      dateOfBirth,
+      contactNumber,
+      proofType,
+      proofNumber,
+      email,
+      description,
+      activeIND,
+      unitID,
+      propertyID,
+      creationDate
+    from
+      tbltenant
+    where
+      Deleted = 0 
+      and unitID = ?
+    `,
+    [tenantID],
     (err, res) => {
       if (err) {
         result(err, null);
@@ -47,7 +103,21 @@ Tenant.getAll = (result) => {
 
 Tenant.findById = (PropertyId, result) => {
   sql.query(
-    `SELECT PropertyID as 'key',PropertyName, Address, Country, City,  State,  Zip, Description, CreationDate FROM tblProperty WHERE PropertyID = ${PropertyId}`,
+    `select
+    PropertyID as 'key',
+    PropertyName,
+    Address,
+    Country,
+    City,
+    State,
+    Zip,
+    Description,
+    CreationDate
+  from
+    tblProperty
+  where
+    Deleted = 0
+    AND PropertyID = ${PropertyId}`,
     (err, res) => {
       if (err) {
         result(err, null);
@@ -64,7 +134,15 @@ Tenant.findById = (PropertyId, result) => {
 
 Tenant.updateById = (id, tenant, result) => {
   sql.query(
-    "UPDATE tblproperty SET PropertyName = ?, address = ? , City = ?, state = ?, zip = ?,country = ?, description = ?, UpdatedDate = CURRENT_TIMESTAMP WHERE PropertyID = ?",
+    `UPDATE tblproperty 
+      SET PropertyName = ?,
+      address = ?,
+      City = ?, 
+      state = ?, 
+      zip = ?,
+      country = ?,
+      description = ?,
+      UpdatedDate = CURRENT_TIMESTAMP WHERE PropertyID = ?`,
     [
       tenant.propertyName,
       tenant.address,

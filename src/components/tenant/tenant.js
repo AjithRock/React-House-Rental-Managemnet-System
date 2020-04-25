@@ -27,7 +27,7 @@ import {
 } from "react-router-dom";
 
 export default function Tenant() {
-  const [from] = Form.useForm();
+  const [form] = Form.useForm();
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState([]);
   const [visible, setVisible] = useState(false);
@@ -111,7 +111,9 @@ export default function Tenant() {
   ];
 
   const addTenant = () => {
-    from.resetFields();
+    form.resetFields();
+    setDivMonthField(false);
+    setDivLeaseField(false);
     setUpdate(false);
     setVisible(true);
     setEditingKey("");
@@ -119,7 +121,7 @@ export default function Tenant() {
 
   const onClose = () => {
     setVisible(false);
-    from.resetFields();
+    form.resetFields();
   };
 
   const handleAdd = (values) => {
@@ -193,7 +195,7 @@ export default function Tenant() {
     setEditingKey(editData[0].key);
     setVisible(true);
     setUpdate(true);
-    from.setFieldsValue(editData[0]);
+    form.setFieldsValue(editData[0]);
   };
 
   const handleDelete = (id) => {
@@ -306,7 +308,7 @@ export default function Tenant() {
   };
 
   const netPayCalculation = () => {
-    var formObj = from.getFieldsValue([
+    var formObj = form.getFieldsValue([
       "rentAmount",
       "taxes",
       "insurance",
@@ -324,7 +326,7 @@ export default function Tenant() {
         netPay = netPay + parseInt(formObj[item]);
       }
     }
-    from.setFieldsValue({ netPayable: netPay });
+    form.setFieldsValue({ netPayable: netPay });
   };
 
   useEffect(() => {
@@ -359,7 +361,7 @@ export default function Tenant() {
           <Form
             layout="vertical"
             onFinish={handleAdd}
-            form={from}
+            form={form}
             name="tenant"
             initialValues={{
               additionalCharge: 0,

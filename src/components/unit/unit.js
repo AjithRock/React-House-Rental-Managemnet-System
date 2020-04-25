@@ -75,26 +75,33 @@ export default function Unit() {
       title: "Status",
       dataIndex: "occupied",
       key: "occupied",
+      width: 140,
+      align:'center',
       render: (occupied) =>
         occupied == 1 ? (
           <span>
-            <Tag style={{width:'70px',textAlign:"center"}} color="#67bf4e">Occupied</Tag>
+            <Tag style={{ width: "70px", textAlign: "center" }} color="#67bf4e">
+              Occupied
+            </Tag>
           </span>
         ) : (
           <span>
-            <Tag style={{width:'70px',textAlign:"center"}} color="#f7af19">Vacant</Tag>
+            <Tag style={{ width: "70px", textAlign: "center" }} color="#f7af19">
+              Vacant
+            </Tag>
           </span>
         ),
     },
     {
       title: "Action",
       dataIndex: "Action",
-      width: 110,
+      width: 140,
+      align:'center',
       render: (text, record) =>
-        data.length >= 1 ? (
+        (
           <span>
             <a onClick={() => handleEdit(record.key)}>Edit</a>
-            {"  |  "}
+            {"  /  "}
             <Popconfirm
               title="Sure to delete?"
               onConfirm={() => handleDelete(record.key)}
@@ -102,11 +109,7 @@ export default function Unit() {
               <a>Delete</a>
             </Popconfirm>
           </span>
-        ) : (
-          <span>
-            <a onClick={() => handleEdit(record.key)}>Edit</a>
-          </span>
-        ),
+        )
     },
   ];
 
@@ -195,6 +198,11 @@ export default function Unit() {
     setVisible(true);
     setUpdate(true);
     from.setFieldsValue(editData[0]);
+  };
+
+  const handleMoveOut = (id) => {
+    var editData = data.filter((item) => item.key == id);
+    console.log(editData);
   };
 
   const handleDelete = (id) => {

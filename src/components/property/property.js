@@ -86,12 +86,13 @@ export default function Property() {
     {
       title: "Action",
       dataIndex: "Action",
-      width: 110,
+      width: 140,
+      align:'center',
       render: (text, record) =>
         data.length >= 1 ? (
           <span>
             <a onClick={() => handleEdit(record.key)}>Edit</a>
-            {"  |  "}
+            {"  /  "}
             <Popconfirm
               title="Sure to delete?"
               onConfirm={() => handleDelete(record.key)}
@@ -244,7 +245,6 @@ export default function Property() {
         >
           <Form
             {...global.layout}
-            name="nest-messages"
             onFinish={handleAdd}
             form={from}
             name="property"

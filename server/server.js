@@ -34,3 +34,9 @@ require("./routes/unit.route")(app);
 
 //Tenant route
 require("./routes/tenant.route")(app);
+
+//Billing route
+require("./routes/billing.route")(app);
+
+//Payment route
+require("./routes/payment.route")(app);

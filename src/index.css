@@ -1,5 +1,31 @@
-@import url("https://fonts.googleapis.com/css?family=Kanit:300,400&display=swap");
-@import url("https://fonts.googleapis.com/css?family=Nunito:400,500,700,600&display=swap");
+/* @import url("https://fonts.googleapis.com/css?family=Kanit:300,400&display=swap"); */
+/* @import url("https://fonts.googleapis.com/css?family=Nunito:400,500,700,600&display=swap"); */
+
+
+/* @font-face {
+  font-family: 'Klavika';
+  src: url(../fonts/Klavika-Regular.otf) format('truetype') font-weight-normal,
+       url(../fonts/Klavika-Bold.otf) format('truetype') font-weight-bold,
+       url(../fonts/Klavika-Bold-Italic.otf) format('truetype') font-italic font-weight-bold;
+} */
+/* 
+@font-face {
+  font-family: "DroidSerif";
+  src: url("DroidSerif-Regular-webfont.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+} */
+
+
+@font-face {
+  font-family: "Kanit";
+  src: url("./assets/fonts/Kanit/Kanit-Regular.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Nunito";
+  src: url("./assets/fonts/Nunito/Nunito-Regular.ttf") format("truetype");
+}
 
 body {
   margin: 0;
@@ -8,11 +34,6 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
 }
 
 .logo {

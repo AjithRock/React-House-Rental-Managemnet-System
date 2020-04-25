@@ -4,6 +4,15 @@ const Tenant = require("../models/tenant.modal");
 const Billing = require("../models/billing.modal");
 const Unit = require("../models/unit.modal");
 
+const moment = require("moment");
+
+const changeUtcToLocal = (date) => {
+  if (typeof date === "undefined") return undefined;
+  var dateUTC = moment.utc(new Date(date)).format();
+  var localDate = moment.utc(dateUTC).local().format("YYYY-MM-DD HH:mm:ss");
+  return localDate;
+};
+
 // Create and Save a new Tenant
 exports.create = (req, res) => {
   // Validate request
@@ -24,7 +33,7 @@ exports.create = (req, res) => {
     tenantName: req.body.tenantName,
     genderID: req.body.genderID,
     age: req.body.age,
-    dateOfBirth: req.body.dateOfBirth,
+    dateOfBirth: changeUtcToLocal(req.body.dateOfBirth),
     occupationID: req.body.occupationID,
     religionID: req.body.religionID,
     contactNumber: req.body.contactNumber,
@@ -44,8 +53,8 @@ exports.create = (req, res) => {
     else {
       var tenantData = data;
 
-      const billing = new Billing({
-        tenantID: data.tenantID,
+      const billingDetails = new Billing({
+        tenantID: tenantData.id,
         rentTypeID: req.body.rentTypeID,
         leasePeriod: req.body.leasePeriod,
         leaseAmount: req.body.leaseAmount,
@@ -57,10 +66,10 @@ exports.create = (req, res) => {
         additionalCharge: req.body.additionalCharge,
         additionalChargeDetails: req.body.additionalChargeDetails,
         netPayable: req.body.netPayable,
-        billingStartDate: req.body.billingStartDate,
+        billingStartDate: changeUtcToLocal(req.body.billingStartDate),
       });
 
-      Billing.create(billing, (err, data) => {
+      Billing.createBillingDetails(billingDetails, (err, data) => {
         if (err) {
           res.status(500).send({
             message:
@@ -68,12 +77,37 @@ exports.create = (req, res) => {
           });
         } else {
           var billingData = data;
+          const billing = new Billing({
+            tenantID: billingData.tenantID,
+            billingID: billingData.id,
+            startingDate: changeUtcToLocal(req.body.billingStartDate),
+            endingDate: moment(changeUtcToLocal(req.body.billingStartDate))
+              .add(1, "months")
+              .format("YYYY-MM-DD HH:mm:ss"),
+            billingDate: moment(changeUtcToLocal(req.body.billingStartDate))
+              .add(1, "months")
+              .format("YYYY-MM-DD HH:mm:ss"),
+            dueDate: moment(changeUtcToLocal(req.body.billingStartDate))
+              .add({ days: 9, months: 1 })
+              .format("YYYY-MM-DD HH:mm:ss"),
+            status: "close",
+          });
+
+          Billing.createBilling(billing, (err, data) => {
+            if (err) {
+              res.status(500).send({
+                message:
+                  err.message ||
+                  "Some error occurred while creating the Tenant.",
+              });
+            }
+          });
 
           const unitOccupancy = new Unit({
-            tenantID: tenantData.tenantID,
+            tenantID: tenantData.id,
             unitID: req.body.unitID,
             occupied: 1,
-            moveInDate: req.body.moveInDate,
+            moveInDate: changeUtcToLocal(req.body.moveInDate),
           });
 
           Unit.createUnitOccupancy(unitOccupancy, (err, data) => {
@@ -102,6 +136,22 @@ exports.findAll = (req, res) => {
         message: err.message || "Some error occurred while retrieving Tenant.",
       });
     else res.send(data);
+  });
+};
+
+exports.findAllByUnit = (req, res) => {
+  Tenant.getAllByUnit(req.params.unitId, (err, data) => {
+    if (err) {
+      if (err.kind === "not_found") {
+        res.status(404).send({
+          message: `Not found Tenant with id ${req.params.unitId}.`
+        });
+      } else {
+        res.status(500).send({
+          message: `Error retrieving Tenant with id ${req.params.unitId}.`
+        });
+      }
+    } else res.send(data);
   });
 };
 
