@@ -40,3 +40,6 @@ require("./routes/billing.route")(app);
 
 //Payment route
 require("./routes/payment.route")(app);
+
+//Dashboard route
+require("./routes/dashboard.route")(app);

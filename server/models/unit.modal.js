@@ -82,7 +82,7 @@ Unit.getAllByProperty = (propertyID, result) => {
       U.UnitID as 'key',
       U.unitName,
       U.unitTypeID,
-      UT.UnitType as 'unitType',
+      UT.unitType,
       U.propertyID,
       P.propertyName ,
       U.areaInSqft,
@@ -91,13 +91,15 @@ Unit.getAllByProperty = (propertyID, result) => {
     from
       tblunit as U
     inner join luUnittype as UT on
-      UT.UnitTypeID = U.UnitTypeID
+      UT.UnitTypeID = U.UnitTypeID and UT.Deleted = 0
     inner join tblproperty as P on
       P.propertyID = U.propertyID AND P.Deleted = 0 
     left join tblunitoccupancy as UO on
       UO.UnitID = U.UnitID
+      and UO.Occupied != 0
     where
-      U.Deleted = 0 AND P.PropertyID =?`,
+      U.Deleted = 0 AND P.PropertyID =?
+    order by UO.Occupied ASC`,
     propertyID,
     (err, res) => {
       if (err) {

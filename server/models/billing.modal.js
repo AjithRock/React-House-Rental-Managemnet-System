@@ -97,7 +97,21 @@ Billing.getAllByTenant = (tenantID, result) => {
 
 Billing.createBillingTillDate = (result) => {
   sql.query(
-    "select b.tenantID,b.billingID,bd.RentTypeID,MAX(CAST(b.BillingDate AS DATE)) AS lastInvoiceGeneratedDate from tblbilling as b inner join tblbillingdetails as bd on bd.BillingID = b.BillingID group by TenantID",
+    `select
+      b.tenantID,
+      b.billingID,
+      bd.RentTypeID,
+      max(cast(b.BillingDate as date)) as lastInvoiceGeneratedDate
+    from
+      tblbilling as b
+    inner join tblbillingdetails as bd on
+      bd.BillingID = b.BillingID
+    left join tbltenant as T on
+      T.TenantID = B.TenantID
+    where
+      t.ActiveIND = 0
+    group by
+      TenantID`,
     (err, res) => {
       if (err) {
         result(err, null);
@@ -110,7 +124,7 @@ Billing.createBillingTillDate = (result) => {
             billingData[i].lastInvoiceGeneratedDate
           );
           var todayDate = new Date();
-          var monthdiffrentCount = moment(todayDate).diff(
+          var monthdiffrentCount = moment(moment(todayDate).endOf('month')).diff(
             moment(lastInvoiceDate),
             "months",
             true
@@ -133,7 +147,7 @@ Billing.createBillingTillDate = (result) => {
                 )}','${billEndDate}','${billEndDate}','${moment(
                 lastInvoiceDate
               )
-                .add({ days: 9, months: y })
+                .add({ days: 4, months: y })
                 .format("YYYY-MM-DD")}','close',${billingData[i].tenantID},'${billEndDate}'),`;
           }
           if (sqlString.length != 0) {

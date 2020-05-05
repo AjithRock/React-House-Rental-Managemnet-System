@@ -13,9 +13,8 @@ import {
   Tooltip,
 } from "antd";
 import axios from "axios";
-import { PlusOutlined } from "@ant-design/icons";
+import { PlusOutlined, SyncOutlined } from "@ant-design/icons";
 import moment from "moment";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default function Payment() {
   const [form] = Form.useForm();
@@ -58,21 +57,13 @@ export default function Payment() {
       title: "Amount To Be Paid",
       dataIndex: "amountToBePaid",
       key: "amountToBePaid",
-      render: (text, record) => (
-        <span>
-          ₹{record.amountToBePaid}
-        </span>
-      ),
+      render: (text, record) => <span>₹{record.amountToBePaid}</span>,
     },
     {
       title: "Amount Paid",
       dataIndex: "amountPaid",
       key: "amountPaid",
-      render: (text, record) => (
-        <span>
-          ₹{record.amountPaid}
-        </span>
-      ),
+      render: (text, record) => <span>₹{record.amountPaid}</span>,
     },
     {
       title: "Payment Type",
@@ -83,11 +74,7 @@ export default function Payment() {
       title: "Balance",
       dataIndex: "balance",
       key: "balance",
-      render: (text, record) => (
-        <span>
-          ₹{record.balance}
-        </span>
-      ),
+      render: (text, record) => <span>₹{record.balance}</span>,
     },
     {
       title: "Billed Date",
@@ -118,7 +105,7 @@ export default function Payment() {
       dataIndex: "Action",
       key: "Action",
       width: 140,
-      align:'center',
+      align: "center",
       render: (text, record) => (
         <span>
           <a onClick={() => handleEdit(record.key)}>View</a>
@@ -155,15 +142,14 @@ export default function Payment() {
         addedData.paymentType = paymentTypeObj.find(
           (item) => item.key == addedData.paymentTypeID
         ).paymentType;
-        addedData.balance= parseInt(addedData.amountToBePaid) - parseInt(addedData.amountPaid);
-        var billingData = invoiceObj.find(
-          (item) => item.key == addedData.invoiceID
-        );
-        ['key', 'rentAmount'].forEach(e => delete billingData[e]);
-        addedData = [{...addedData, ...billingData }];
-        console.log(data);
+        addedData.balance =
+          parseInt(addedData.amountToBePaid) - parseInt(addedData.amountPaid);
+        // var billingData = invoiceObj.find(
+        //   (item) => item.key == addedData.invoiceID
+        // );
+        // ["key", "rentAmount"].forEach((e) => delete billingData[e]);
+        //, ...billingData
         setData(data.concat(addedData));
-        console.log(data);
         message.success({
           content: "Paid successfully!",
           key: "Payment",
@@ -204,7 +190,6 @@ export default function Payment() {
           duration: 3,
         });
       });
-    
   };
 
   const getPayment = () => {
@@ -303,7 +288,7 @@ export default function Payment() {
     <div>
       <div className="header-div">
         <h1 className="header-title">Payment </h1>
-        <div>
+        <div className="fadeInUp" style={{ animationDelay: "0.6s" }}>
           <Tooltip title="Sync Invoive">
             <Button
               style={{ marginRight: 10 }}
@@ -312,7 +297,7 @@ export default function Payment() {
               onClick={syncInvoice}
               disabled={syncInvoiceLoading}
             >
-              <FontAwesomeIcon icon="sync-alt" spin={syncInvoiceLoading} />
+              <SyncOutlined spin={syncInvoiceLoading} />
             </Button>
           </Tooltip>
 
@@ -322,7 +307,7 @@ export default function Payment() {
           </Button>
         </div>
       </div>
-      <div>
+      <div className="fadeInUp" style={{ animationDelay: "0.3s" }}>
         <Drawer
           title="Add Payment"
           width={620}
@@ -541,7 +526,6 @@ export default function Payment() {
           </Form>
         </Drawer>
         <Card
-          title="Paid List"
           style={{ width: "100%" }}
           headStyle={{ padding: " 0 16px" }}
           bodyStyle={{ padding: 0 }}
@@ -553,6 +537,7 @@ export default function Payment() {
             loading={loading}
             pagination={{
               total: data.length,
+              showSizeChanger: true,
               showTotal: (total, range) =>
                 `${range[0]}-${range[1]} of ${total} items`,
             }}

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import {
   Table,
-  Popconfirm,
   Form,
   Input,
   message,
@@ -14,10 +13,12 @@ import {
   DatePicker,
   Divider,
   Badge,
+  Tag,
 } from "antd";
-import TenantDetails from "./tenantDetails";
+import TenantProfile from "./tenantProfile";
 import axios from "axios";
 import { PlusOutlined } from "@ant-design/icons";
+import moment from "moment";
 import {
   BrowserRouter as Router,
   Switch,
@@ -57,54 +58,85 @@ export default function Tenant() {
 
   const columns = [
     {
-      title: "Property Name",
-      dataIndex: "propertyName",
-      key: "propertyName",
-      ellipsis: true,
-    },
-    {
       title: "Tenant Name",
-      dataIndex: "unitName",
-      key: "unitName",
+      dataIndex: "tenantName",
+      key: "tenantName",
+      ellipsis: true,
+      sorter: (a, b) => global.customSort(a.tenantName, b.tenantName),
+      sortDirections: ["ascend", "descend"],
+      render: (text, record) => (
+        <span>
+          <Link to={`${url}/${record.key}`}>{record.tenantName}</Link>
+        </span>
+      ),
+    },
+    {
+      title: "Age",
+      dataIndex: "age",
+      width: 60,
+    },
+    {
+      title: "Gender",
+      dataIndex: "genderName",
+      width: 120,
+    },
+    {
+      title: "Date Of Birth",
+      dataIndex: "dateOfBirth",
+      width: 140,
+      render: (dateOfBirth) => (
+        <span>
+          {!dateOfBirth
+            ? null
+            : moment(global.changeUtcToLocal(dateOfBirth)).format(
+                "Do MMMM YYYY"
+              )}
+        </span>
+      ),
+    },
+    {
+      title: "Occupation",
+      dataIndex: "occupationName",
+      width: 160,
       ellipsis: true,
     },
-
     {
-      title: "Tenant Type",
-      dataIndex: "unitType",
-      key: "unitType",
-      ellipsis: true,
+      title: "Contact Number",
+      dataIndex: "contactNumber",
+      width: 160,
+      render: (contactNumber) => (
+        <span>
+          {!contactNumber ? null : "+91"} {contactNumber}
+        </span>
+      ),
     },
     {
-      title: "Area (in Sq.ft)",
-      dataIndex: "areaInSqft",
-      key: "areaInSqft",
+      title: "Email",
+      dataIndex: "email",
       ellipsis: true,
     },
     {
       title: "Description",
       dataIndex: "description",
-      key: "description",
       ellipsis: true,
     },
     {
-      title: "Action",
-      dataIndex: "Action",
-      render: (text, record) =>
-        data.length >= 1 ? (
+      title: "Status",
+      dataIndex: "activeIND",
+      width: 140,
+      align: "center",
+      render: (activeIND) =>
+        activeIND == 0 ? (
           <span>
-            <a onClick={() => handleEdit(record.key)}>Edit</a>
-            {"  |  "}
-            <Popconfirm
-              title="Sure to delete?"
-              onConfirm={() => handleDelete(record.key)}
-            >
-              <a>Delete</a>
-            </Popconfirm>
+            <Tag style={{ width: "70px", textAlign: "center" }} color="#67bf4e">
+              Current
+            </Tag>
           </span>
         ) : (
           <span>
-            <a onClick={() => handleEdit(record.key)}>Edit</a>
+            <Tag style={{ width: "70px", textAlign: "center" }} color="#f7b924">
+              Former
+            </Tag>
           </span>
         ),
     },
@@ -329,7 +361,24 @@ export default function Tenant() {
     form.setFieldsValue({ netPayable: netPay });
   };
 
+  const getTenantList = () => {
+    axios
+      .get(`${global.url}/api/tenant`)
+      .then(function (response) {
+        setLoading(false);
+        setData(response.data);
+      })
+      .catch(function (error) {
+        message.error({
+          content: "Failed to Load Property List!",
+          key: "Property",
+          duration: 3,
+        });
+      });
+  };
+
   useEffect(() => {
+    getTenantList();
     getReligion();
     getProperty();
     getGender();
@@ -344,12 +393,14 @@ export default function Tenant() {
     <>
       <div className="header-div">
         <h1 className="header-title">Tenant</h1>
-        <Button type="primary" ghost onClick={addTenant}>
-          <PlusOutlined />
-          New Tenant
-        </Button>
+        <div className="fadeInUp" style={{ animationDelay: "0.6s" }}>
+          <Button type="primary" ghost onClick={addTenant}>
+            <PlusOutlined />
+            New Tenant
+          </Button>
+        </div>
       </div>
-      <div>
+      <div className="fadeInUp" style={{ animationDelay: "0.3s" }}>
         <Drawer
           title={update ? "Edit Tenant" : "Add Tenant"}
           width={700}
@@ -411,20 +462,11 @@ export default function Tenant() {
                   label="Unit Name"
                   rules={[{ required: true }]}
                 >
-                  <Select
-                    loading={unitDropdownLoading}
-                    showSearch
-                    allowClear
-                    filterOption={(input, option) =>
-                      option.children
-                        .toLowerCase()
-                        .indexOf(input.toLowerCase()) >= 0
-                    }
-                  >
+                  <Select loading={unitDropdownLoading} allowClear>
                     {unitObj.map(function (item, index) {
                       return (
                         <Select.Option key={item.key} value={item.key}>
-                          {item.unitName}{" "}
+                          {item.unitName}
                           <span style={{ float: "right" }}>
                             {item.occupied === 1 ? (
                               <Badge status="error" text="Occupied" />
@@ -573,7 +615,7 @@ export default function Tenant() {
             </Row>
             <Row gutter={[8, 8]}>
               <Col span={12}>
-                <Form.Item name="proofType" label="Proof Type">
+                <Form.Item name="proofTypeID" label="Proof Type">
                   <Select
                     loading={proofDropdownLoading}
                     showSearch
@@ -872,22 +914,9 @@ export default function Tenant() {
             </Row>
           </Form>
         </Drawer>
-        <ul>
-          <li>
-            <Link to={`${url}/1`}>Rendering with React</Link>
-          </li>
-          <li>
-            <Link to={`${url}/2`}>Components</Link>
-          </li>
-          <li>
-            <Link to={`${url}/3`}>Props v. State</Link>
-          </li>
-        </ul>
-
         <Switch>
           <Route exact path={path}>
             <Card
-              title="Tenant List"
               style={{ width: "100%" }}
               headStyle={{ padding: " 0 16px" }}
               bodyStyle={{ padding: 0 }}
@@ -899,6 +928,7 @@ export default function Tenant() {
                 loading={loading}
                 pagination={{
                   total: data.length,
+                  showSizeChanger: true,
                   showTotal: (total, range) =>
                     `${range[0]}-${range[1]} of ${total} items`,
                 }}
@@ -906,7 +936,7 @@ export default function Tenant() {
             </Card>
           </Route>
           <Route path={`${path}/:topicId`}>
-            <TenantDetails />
+            <TenantProfile />
           </Route>
         </Switch>
       </div>

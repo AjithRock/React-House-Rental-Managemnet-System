@@ -1,6 +1,12 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Layout, Menu, Avatar, Button, Divider, Popover } from "antd";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+  useLocation,
+} from "react-router-dom";
 import Dashboard from "./components/dashboard/dashboard";
 import Property from "./components/property/property";
 import Unit from "./components/unit/unit";
@@ -38,152 +44,161 @@ const LogoutDiv = (data) => (
   </div>
 );
 
-class App extends React.Component {
-  state = {
-    collapsed: false,
-    userData: {
-      username: "Admin User",
-      email: "adminuser@admin.com",
-      avatar: "src/assets/image/147133.png",
-    },
+export default function App() {
+  let location = useLocation();
+  const [collapsed, setCollapsed] = useState(false);
+  const userData = {
+    username: "Admin User",
+    email: "adminuser@admin.com",
+    avatar: "src/assets/image/147133.png",
   };
 
-  toggle = () => {
-    this.setState({
-      collapsed: !this.state.collapsed,
-    });
+  const navList = [
+    { key: "1", name: "/" },
+    { key: "2", name: "/Property" },
+    { key: "3", name: "/Unit" },
+    { key: "4", name: "/Tenant" },
+    { key: "5", name: "/Payment" },
+    { key: "6", name: "/Report" },
+    { key: "7", name: "/Admin" },
+  ];
+
+  const toggle = () => {
+    setCollapsed(!collapsed);
   };
 
-  render() {
-    return (
-      <Router>
-        <Layout
+  const setNavigationBar = () => {
+    var navKey = navList.find((item) => {
+      return location.pathname.includes(item.name);
+    }).key;
+    return [navKey.toString()];
+  };
+  return (
+    <Router>
+      <Layout
+        style={{
+          minHeight: "100vh",
+        }}
+      >
+        <Sider
           style={{
-            minHeight: "100vh",
+            overflow: "auto",
+            height: "100vh",
+            position: "fixed",
+            left: 0,
           }}
+          trigger={null}
+          collapsible
+          collapsed={collapsed}
+          collapsedWidth={0}
         >
-          <Sider
-            style={{
-              overflow: "auto",
-              height: "100vh",
-              position: "fixed",
-              left: 0,
-            }}
-            trigger={null}
-            collapsible
-            collapsed={this.state.collapsed}
+          <div className="logo" />
+          <Menu
+            theme="dark"
+            defaultSelectedKeys={setNavigationBar()}
+            mode="inline"
           >
-            <div className="logo" />
-            <Menu theme="dark" defaultSelectedKeys={["1"]} mode="inline">
-              <Menu.Item key="1">
-                <PieChartOutlined />
-                {/* <FontAwesomeIcon icon={faHeart} /> */}
-                <span> Dashboard </span> <Link to="/"></Link>
-              </Menu.Item>
-              <Menu.Item key="2">
-                <HomeOutlined />
-                <span>Property</span> <Link to="/Property"></Link>
-              </Menu.Item>
-              <Menu.Item key="3">
-                <ShopOutlined />
-                <span>Unit</span> <Link to="/Unit"></Link>
-              </Menu.Item>
-              <Menu.Item key="4">
-                <UserOutlined />
-                <span>Tenant</span> <Link to="/Tenant"></Link>
-              </Menu.Item>
-              <Menu.Item key="5">
-                <CarryOutOutlined />
-                <span>Payment</span> <Link to="/Payment"></Link>
-              </Menu.Item>
-              <Menu.Item key="6">
-                <FileDoneOutlined />
-                <span>Report</span> <Link to="/Report"></Link>
-              </Menu.Item>
-              <Menu.Item key="7">
-                <SettingOutlined />
-                <span>Admin</span> <Link to="/Admin"></Link>
-              </Menu.Item>
-            </Menu>
-          </Sider>
-          <Layout>
-            <Header
-              style={{
-                background: "#fff",
-                boxShadow:
-                  "0 5px 15px rgba(57, 98, 254, 0.02), 0 3px 6px rgba(117, 108, 254, 0.12)",
-                padding: 0,
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                marginLeft: this.state.collapsed ? 80 : 200,
-                transition: "all 0.2s",
-                position: "fixed",
-                height: 64,
-                zIndex: 1,
-                width: this.state.collapsed
-                  ? "calc(100% - 80px)"
-                  : "calc(100% - 200px)",
-              }}
-            >
-              <MenuOutlined
-                style={{ fontSize: 16, padding: 18 }}
-                className="trigger"
-                type="menu"
-                onClick={this.toggle}
-              />
-              <div>
-                <span className="user-tile">
-                  {this.state.userData.username}
-                </span>
-                <Popover
-                  overlayClassName="logout-Popover"
-                  placement="bottomRight"
-                  content={LogoutDiv(this.state.userData)}
-                  trigger="click"
-                >
-                  <Avatar
-                    style={{
-                      float: "right",
-                      margin: "16px 10px",
-                      cursor: "pointer",
-                    }}
-                    src={UserAvatar}
-                  />
-                </Popover>
-              </div>
-            </Header>
-            <Content
-              className="app-container"
-              style={{
-                marginLeft: this.state.collapsed ? 80 : 200,
-              }}
-            >
-              <Switch>
-                <Route exact path="/" component={Dashboard} />
-                <Route path="/Property" component={Property} />
-                <Route path="/Unit" component={Unit} />
-                <Route path="/Tenant" component={Tenant} />
-                <Route path="/Payment" component={Payment} />
-                <Route path="/Report" component={Report} />
-                <Route path="/Admin" component={Admin} />
-                <Route path="*" component={PageNotFound} />
-              </Switch>
-            </Content>
-            <Footer
-              style={{
-                textAlign: "center",
-                marginLeft: this.state.collapsed ? 80 : 200,
-                transition: "all 0.2s",
-              }}
-            >
-              Sweet Home {new Date().getFullYear()}
-            </Footer>
-          </Layout>
+            <Menu.Item key="1">
+              <PieChartOutlined />
+              <span> Dashboard </span> <Link to="/"></Link>
+            </Menu.Item>
+            <Menu.Item key="2">
+              <HomeOutlined />
+              <span>Property</span> <Link to="/Property"></Link>
+            </Menu.Item>
+            <Menu.Item key="3">
+              <ShopOutlined />
+              <span>Unit</span> <Link to="/Unit"></Link>
+            </Menu.Item>
+            <Menu.Item key="4">
+              <UserOutlined />
+              <span>Tenant</span> <Link to="/Tenant"></Link>
+            </Menu.Item>
+            <Menu.Item key="5">
+              <CarryOutOutlined />
+              <span>Payment</span> <Link to="/Payment"></Link>
+            </Menu.Item>
+            <Menu.Item key="6">
+              <FileDoneOutlined />
+              <span>Report</span> <Link to="/Report"></Link>
+            </Menu.Item>
+            <Menu.Item key="7">
+              <SettingOutlined />
+              <span>Admin</span> <Link to="/Admin"></Link>
+            </Menu.Item>
+          </Menu>
+        </Sider>
+        <Layout>
+          <Header
+            style={{
+              background: "#fff",
+              boxShadow:
+                "0 5px 15px rgba(57, 98, 254, 0.02), 0 3px 6px rgba(117, 108, 254, 0.12)",
+              padding: 0,
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginLeft: collapsed ? 0 : 200,
+              transition: "all 0.2s",
+              position: "fixed",
+              height: 64,
+              zIndex: 1,
+              width: collapsed ? "calc(100% - 0px)" : "calc(100% - 200px)",
+            }}
+          >
+            <MenuOutlined
+              style={{ fontSize: 16, padding: 18 }}
+              className="trigger"
+              type="menu"
+              onClick={toggle}
+            />
+            <div>
+              <span className="user-tile">{userData.username}</span>
+              <Popover
+                overlayClassName="logout-Popover"
+                placement="bottomRight"
+                content={LogoutDiv(userData)}
+                trigger="click"
+              >
+                <Avatar
+                  style={{
+                    float: "right",
+                    margin: "16px 10px",
+                    cursor: "pointer",
+                  }}
+                  src={UserAvatar}
+                />
+              </Popover>
+            </div>
+          </Header>
+          <Content
+            className="app-container"
+            style={{
+              marginLeft: collapsed ? 0 : 200,
+            }}
+          >
+            <Switch>
+              <Route exact path="/" component={Dashboard} />
+              <Route path="/Property" component={Property} />
+              <Route path="/Unit" component={Unit} />
+              <Route path="/Tenant" component={Tenant} />
+              <Route path="/Payment" component={Payment} />
+              <Route path="/Report" component={Report} />
+              <Route path="/Admin" component={Admin} />
+              <Route path="*" component={PageNotFound} />
+            </Switch>
+          </Content>
+          <Footer
+            style={{
+              textAlign: "center",
+              marginLeft: collapsed ? 0 : 200,
+              transition: "all 0.2s",
+            }}
+          >
+            Sweet Home {new Date().getFullYear()}
+          </Footer>
         </Layout>
-      </Router>
-    );
-  }
+      </Layout>
+    </Router>
+  );
 }
-
-export default App;

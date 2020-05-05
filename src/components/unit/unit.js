@@ -13,6 +13,7 @@ import {
 } from "antd";
 import axios from "axios";
 import { PlusOutlined } from "@ant-design/icons";
+import { Trash, Edit3 } from "react-feather";
 
 export default function Unit() {
   const [from] = Form.useForm();
@@ -59,7 +60,7 @@ export default function Unit() {
       dataIndex: "areaInSqft",
       key: "areaInSqft",
       ellipsis: true,
-      width: 110,
+      width: 130,
       sorter: (a, b) => global.customSort(a.areaInSqft, b.areaInSqft),
       sortDirections: ["ascend", "descend"],
     },
@@ -76,7 +77,7 @@ export default function Unit() {
       dataIndex: "occupied",
       key: "occupied",
       width: 140,
-      align:'center',
+      align: "center",
       render: (occupied) =>
         occupied == 1 ? (
           <span>
@@ -86,7 +87,7 @@ export default function Unit() {
           </span>
         ) : (
           <span>
-            <Tag style={{ width: "70px", textAlign: "center" }} color="#f7af19">
+            <Tag style={{ width: "70px", textAlign: "center" }} color="#f7b924">
               Vacant
             </Tag>
           </span>
@@ -96,20 +97,22 @@ export default function Unit() {
       title: "Action",
       dataIndex: "Action",
       width: 140,
-      align:'center',
-      render: (text, record) =>
-        (
-          <span>
-            <a onClick={() => handleEdit(record.key)}>Edit</a>
-            {"  /  "}
-            <Popconfirm
-              title="Sure to delete?"
-              onConfirm={() => handleDelete(record.key)}
-            >
-              <a>Delete</a>
-            </Popconfirm>
-          </span>
-        )
+      align: "center",
+      render: (text, record) => (
+        <span>
+          <a onClick={() => handleEdit(record.key)}>
+            <Edit3 color="#595959" size={18} />
+          </a>
+          <Popconfirm
+            title="Sure to delete?"
+            onConfirm={() => handleDelete(record.key)}
+          >
+            <a>
+              <Trash size={18} color="#595959" style={{ marginLeft: 4 }} />
+            </a>
+          </Popconfirm>
+        </span>
+      ),
     },
   ];
 
@@ -272,12 +275,14 @@ export default function Unit() {
     <div>
       <div className="header-div">
         <h1 className="header-title">Unit</h1>
-        <Button type="primary" ghost onClick={addUnit}>
-          <PlusOutlined />
-          New Unit
-        </Button>
+        <div className="fadeInUp" style={{ animationDelay: "0.6s" }}>
+          <Button type="primary" ghost onClick={addUnit}>
+            <PlusOutlined />
+            New Unit
+          </Button>
+        </div>
       </div>
-      <div>
+      <div className="fadeInUp" style={{ animationDelay: "0.3s" }}>
         <Drawer
           title={update ? "Edit Unit" : "Add Unit"}
           width={540}
@@ -363,7 +368,6 @@ export default function Unit() {
           </Form>
         </Drawer>
         <Card
-          title="Unit List"
           style={{ width: "100%" }}
           headStyle={{ padding: " 0 16px" }}
           bodyStyle={{ padding: 0 }}
@@ -375,6 +379,7 @@ export default function Unit() {
             loading={loading}
             pagination={{
               total: data.length,
+              showSizeChanger: true,
               showTotal: (total, range) =>
                 `${range[0]}-${range[1]} of ${total} items`,
             }}

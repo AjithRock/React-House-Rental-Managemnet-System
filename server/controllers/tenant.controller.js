@@ -38,7 +38,7 @@ exports.create = (req, res) => {
     religionID: req.body.religionID,
     contactNumber: req.body.contactNumber,
     email: req.body.email,
-    proofType: req.body.proofType,
+    proofTypeID: req.body.proofTypeID,
     proofNumber: req.body.proofNumber,
     description: req.body.description,
   });
@@ -88,7 +88,7 @@ exports.create = (req, res) => {
               .add(1, "months")
               .format("YYYY-MM-DD HH:mm:ss"),
             dueDate: moment(changeUtcToLocal(req.body.billingStartDate))
-              .add({ days: 9, months: 1 })
+              .add({ days: 4, months: 1 })
               .format("YYYY-MM-DD HH:mm:ss"),
             status: "close",
           });

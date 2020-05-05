@@ -13,7 +13,7 @@ const Tenant = function (tenant) {
   this.religionID = tenant.religionID;
   this.contactNumber = tenant.contactNumber;
   this.email = tenant.email;
-  this.proofType = tenant.proofType;
+  this.proofTypeID = tenant.proofTypeID;
   this.proofNumber = tenant.proofNumber;
   this.description = tenant.description;
 };
@@ -35,26 +35,35 @@ Tenant.create = (newTenant, result) => {
 Tenant.getAll = (result) => {
   sql.query(
     `select
-      tenantID as 'key',
-      tenantName Age,
-      GenderID,
-      OccupationID,
-      ReligionID,
-      DateOfBirth,
-      ContactNumber,
-      ProofType,
-      ProofNumber,
-      Email,
-      Description,
-      ActiveIND,
-      UnitID,
-      PropertyID,
-      CreationDate
-    from
-      tbltenant
-    where
-      Deleted = 0
-    `,
+    T.tenantID as 'key',
+    T.tenantName,
+    T.age,
+    T.genderID,
+    G.genderName,
+    T.occupationID,
+    O.occupationName,
+    T.religionID,
+    R.religion,
+    T.dateOfBirth,
+    T.contactNumber,
+    T.proofTypeID,
+    T.proofNumber,
+    T.email,
+    T.description,
+    T.activeIND,
+    T.unitID,
+    T.propertyID,
+    T.creationDate
+  from
+    tbltenant T
+  inner join refgender as G on
+    G.GenderID = T.	GenderID and G.Deleted=0
+  left join refoccupation as O on 
+    O.OccupationID =T.OccupationID and O.Deleted=0
+  left join lureligion  as R on 
+    R.ReligionID = T.ReligionID and R.Deleted = 0
+  where
+    T.Deleted = 0 order by T.activeIND asc`,
     (err, res) => {
       if (err) {
         result(err, null);
@@ -76,7 +85,7 @@ Tenant.getAllByUnit = (tenantID, result) => {
       religionID,
       dateOfBirth,
       contactNumber,
-      proofType,
+      proofTypeID,
       proofNumber,
       email,
       description,
@@ -101,23 +110,73 @@ Tenant.getAllByUnit = (tenantID, result) => {
   );
 };
 
-Tenant.findById = (PropertyId, result) => {
+Tenant.findById = (tenantID, result) => {
   sql.query(
     `select
-    PropertyID as 'key',
-    PropertyName,
-    Address,
-    Country,
-    City,
-    State,
-    Zip,
-    Description,
-    CreationDate
-  from
-    tblProperty
-  where
-    Deleted = 0
-    AND PropertyID = ${PropertyId}`,
+      T.tenantID as 'key',
+      T.tenantName,
+      T.age,
+      T.genderID,
+      G.genderName,
+      T.occupationID,
+      O.occupationName,
+      T.religionID,
+      R.religion,
+      T.dateOfBirth,
+      T.contactNumber,
+      T.proofTypeID,
+      PT.proofType,
+      T.proofNumber,
+      T.email,
+      T.description,
+      T.activeIND,
+      T.unitID,
+      UT.unitType,
+      U.unitName,
+      T.propertyID,
+      P.propertyName,
+      UO.occupied,
+      UO.moveInDate,
+      UO.moveOutDate,
+      Uo.moveOutConditionNote,
+      Uo.moveOutReasonNote,
+      Uo.inspectionComplete,
+      UO.depositReturnedIND,
+      UO.depositReturnedDate,
+      UO.depositReturnedAmount,
+      UO.keysReturned,
+      Uo.carParkedIND,
+      Uo.gave30DayNoticeIND
+    from
+      tbltenant T
+    inner join refgender as G on
+      G.GenderID = T. GenderID
+      and G.Deleted = 0
+    inner join tblunitoccupancy as UO on
+      UO.TenantID = T.TenantID
+      and Uo.Deleted = 0
+    inner join tblunit as U on
+      U.UnitID = T.UnitID
+      and U.Deleted = 0
+    inner join tblproperty as P on
+      P.PropertyID = T.PropertyID
+      and P.Deleted = 0
+    left join refoccupation as O on
+      O.OccupationID = T.OccupationID
+      and O.Deleted = 0
+    left join lureligion as R on
+      R.ReligionID = T.ReligionID
+      and R.Deleted = 0
+    inner join luUnittype as UT on
+      UT.UnitTypeID = U.UnitTypeID
+      and Ut.Deleted = 0
+    left join luprooftype as PT on 
+      PT.ProofTypeID = T.ProofTypeID
+      and PT.Deleted = 0
+    where
+      T.Deleted = 0
+      and T.TenantID = ?`,
+    [tenantID],
     (err, res) => {
       if (err) {
         result(err, null);

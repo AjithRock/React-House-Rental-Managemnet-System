@@ -13,7 +13,8 @@ module.exports = app => {
   // Update a unit with unitId
   app.put("/api/unit/:unitId", unit.update);
 
-  // app.patch("/api/unit/:unitId", unit.update);
+  //update unit ocupacny MoveoutStatus
+  // app.patch("/api/unit/:tenantID", unit.unitMoveOut);
 
   // Delete a unit with unitId
   app.delete("/api/unit/:unitId", unit.delete);

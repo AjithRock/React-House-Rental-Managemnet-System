@@ -7,10 +7,11 @@ import {
   message,
   Drawer,
   Button,
-  Card
+  Card,
 } from "antd";
 import axios from "axios";
 import { PlusOutlined } from "@ant-design/icons";
+import { Trash, Edit3 } from "react-feather";
 
 export default function Property() {
   const [from] = Form.useForm();
@@ -28,7 +29,7 @@ export default function Property() {
       ellipsis: true,
       width: 200,
       sorter: (a, b) => global.customSort(a.name, b.name),
-      sortDirections: ["ascend", "descend"]
+      sortDirections: ["ascend", "descend"],
     },
     {
       title: "Address",
@@ -36,7 +37,7 @@ export default function Property() {
       key: "address",
       ellipsis: true,
       sorter: (a, b) => global.customSort(a.address, b.address),
-      sortDirections: ["ascend", "descend"]
+      sortDirections: ["ascend", "descend"],
     },
 
     {
@@ -46,7 +47,7 @@ export default function Property() {
       ellipsis: true,
       width: 110,
       sorter: (a, b) => global.customSort(a.city, b.city),
-      sortDirections: ["ascend", "descend"]
+      sortDirections: ["ascend", "descend"],
     },
     {
       title: "State",
@@ -55,7 +56,7 @@ export default function Property() {
       ellipsis: true,
       width: 140,
       sorter: (a, b) => global.customSort(a.state, b.state),
-      sortDirections: ["ascend", "descend"]
+      sortDirections: ["ascend", "descend"],
     },
     {
       title: "Zip",
@@ -64,7 +65,7 @@ export default function Property() {
       ellipsis: true,
       width: 110,
       sorter: (a, b) => global.customSort(a.zip, b.zip),
-      sortDirections: ["ascend", "descend"]
+      sortDirections: ["ascend", "descend"],
     },
     {
       title: "Country",
@@ -73,7 +74,7 @@ export default function Property() {
       ellipsis: true,
       width: 110,
       sorter: (a, b) => global.customSort(a.country, b.country),
-      sortDirections: ["ascend", "descend"]
+      sortDirections: ["ascend", "descend"],
     },
     {
       title: "Description",
@@ -81,31 +82,29 @@ export default function Property() {
       key: "description",
       ellipsis: true,
       sorter: (a, b) => global.customSort(a.description, b.description),
-      sortDirections: ["ascend", "descend"]
+      sortDirections: ["ascend", "descend"],
     },
     {
       title: "Action",
       dataIndex: "Action",
       width: 140,
-      align:'center',
-      render: (text, record) =>
-        data.length >= 1 ? (
-          <span>
-            <a onClick={() => handleEdit(record.key)}>Edit</a>
-            {"  /  "}
-            <Popconfirm
-              title="Sure to delete?"
-              onConfirm={() => handleDelete(record.key)}
-            >
-              <a>Delete</a>
-            </Popconfirm>
-          </span>
-        ) : (
-          <span>
-            <a onClick={() => handleEdit(record.key)}>Edit</a>
-          </span>
-        )
-    }
+      align: "center",
+      render: (text, record) => (
+        <span>
+          <a onClick={() => handleEdit(record.key)}>
+            <Edit3 color="#595959" size={18} />
+          </a>
+          <Popconfirm
+            title="Sure to delete?"
+            onConfirm={() => handleDelete(record.key)}
+          >
+            <a>
+              <Trash size={18} color="#595959" style={{ marginLeft: 4 }} />
+            </a>
+          </Popconfirm>
+        </span>
+      ),
+    },
   ];
 
   const addPropery = () => {
@@ -120,39 +119,39 @@ export default function Property() {
     from.resetFields();
   };
 
-  const handleAdd = values => {
+  const handleAdd = (values) => {
     setVisible(false);
     if (update) {
       message.loading({ content: "Updating Property", key: "Property" });
       axios
         .put(`${global.url}/api/property/${editingKey}`, values)
-        .then(function(response) {
+        .then(function (response) {
           var editData = response.data;
           editData.key = parseInt(response.data.id);
           delete editData.id;
           const newData = [...data];
-          const index = newData.findIndex(item => editData.key === item.key);
+          const index = newData.findIndex((item) => editData.key === item.key);
           const item = newData[index];
           newData.splice(index, 1, { ...item, ...editData });
           setData(newData);
           message.success({
             content: "Property Updated successfully!",
             key: "Property",
-            duration: 3
+            duration: 3,
           });
         })
-        .catch(function(error) {
+        .catch(function (error) {
           message.error({
             content: "Failed to Update Property!",
             key: "Property",
-            duration: 3
+            duration: 3,
           });
         });
     } else {
       message.loading({ content: "Adding Property", key: "Property" });
       axios
         .post(`${global.url}/api/property`, values)
-        .then(function(response) {
+        .then(function (response) {
           var addedData = response.data;
           addedData.key = response.data.id;
           delete addedData.id;
@@ -163,44 +162,44 @@ export default function Property() {
           message.success({
             content: "Property Added successfully!",
             key: "Property",
-            duration: 3
+            duration: 3,
           });
         })
-        .catch(function(error) {
+        .catch(function (error) {
           message.error({
             content: "Failed to Add Property!",
             key: "Property",
-            duration: 3
+            duration: 3,
           });
         });
     }
   };
 
-  const handleEdit = id => {
-    var editData = data.filter(item => item.key == id);
+  const handleEdit = (id) => {
+    var editData = data.filter((item) => item.key == id);
     setEditingKey(editData[0].key);
     setVisible(true);
     setUpdate(true);
     from.setFieldsValue(editData[0]);
   };
 
-  const handleDelete = id => {
+  const handleDelete = (id) => {
     message.loading({ content: "Deleting Property", key: "Property" });
     axios
       .delete(`${global.url}/api/property/${id}`)
-      .then(function(response) {
-        setData(data.filter(item => item.key != id));
+      .then(function (response) {
+        setData(data.filter((item) => item.key != id));
         message.success({
           content: "Property deleted successfully!",
           key: "Property",
-          duration: 3
+          duration: 3,
         });
       })
-      .catch(function(error) {
+      .catch(function (error) {
         message.error({
           content: "Failed to Delete Property!",
           key: "Property",
-          duration: 3
+          duration: 3,
         });
       });
   };
@@ -208,15 +207,15 @@ export default function Property() {
   const getPropertyList = () => {
     axios
       .get(`${global.url}/api/property`)
-      .then(function(response) {
+      .then(function (response) {
         setLoading(false);
         setData(response.data);
       })
-      .catch(function(error) {
+      .catch(function (error) {
         message.error({
           content: "Failed to Load Property List!",
           key: "Property",
-          duration: 3
+          duration: 3,
         });
       });
   };
@@ -229,12 +228,15 @@ export default function Property() {
     <div>
       <div className="header-div">
         <h1 className="header-title">Property </h1>
-        <Button type="primary" ghost onClick={addPropery}>
-          <PlusOutlined />
-          New Property
-        </Button>
+        <div className="fadeInUp" style={{ animationDelay: "0.6s" }}>
+          <Button type="primary" ghost onClick={addPropery}>
+            <PlusOutlined />
+            New Property
+          </Button>
+        </div>
+       
       </div>
-      <div>
+      <div className="fadeInUp" style={{ animationDelay: "0.3s" }}>
         <Drawer
           title={update ? "Edit Property" : "Add Property"}
           width={540}
@@ -250,7 +252,11 @@ export default function Property() {
             name="property"
             validateMessages={global.validateMessages}
           >
-            <Form.Item name="propertyName" label="Name" rules={[{ required: true }]}>
+            <Form.Item
+              name="propertyName"
+              label="Name"
+              rules={[{ required: true }]}
+            >
               <Input />
             </Form.Item>
             <Form.Item
@@ -290,7 +296,6 @@ export default function Property() {
           </Form>
         </Drawer>
         <Card
-          title="Property List"
           style={{ width: "100%" }}
           headStyle={{ padding: " 0 16px" }}
           bodyStyle={{ padding: 0 }}
@@ -303,7 +308,7 @@ export default function Property() {
             pagination={{
               total: data.length,
               showTotal: (total, range) =>
-                `${range[0]}-${range[1]} of ${total} items`
+                `${range[0]}-${range[1]} of ${total} items`,
             }}
           />
         </Card>

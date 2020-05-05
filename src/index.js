@@ -3,7 +3,12 @@ import ReactDOM from "react-dom";
 import "antd/dist/antd.css";
 import "./index.css";
 import App from "./App";
-import "./global"
-import './assets/icon/fontAwesome';
-
-ReactDOM.render(<App />, document.getElementById("root"));
+import "./global";
+import "./App.scss";
+import { BrowserRouter as Router } from "react-router-dom";
+ReactDOM.render(
+  <Router>
+    <App />
+  </Router>,
+  document.getElementById("root")
+);
