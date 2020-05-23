@@ -25,8 +25,8 @@ import { Bar, Doughnut } from "react-chartjs-2";
 const CardTitleWithExtras = (title, extra) => {
   return (
     <div className="header-div" key={title}>
-      <div className="dashboard-card-title">{title}</div>
-      {extra ? <div>{extra}</div> : null}
+      <div className="dashboard-card-title"> {title} </div>
+      {extra ? <div> {extra} </div> : null}
     </div>
   );
 };
@@ -104,9 +104,7 @@ export default function Dashboard() {
           dataObj.backgroundColor = "rgba(255, 99, 132, 0.5)";
           dataObj.borderColor = "rgb(255, 99, 132)";
           dataObj.borderWidth = 1;
-          dataObj.barThickness = 30;
-          dataObj.maxBarThickness = 40;
-          dataObj.minBarLength = 6,
+          dataObj.maxBarThickness = 30;
           dataArr.push(dataObj);
         });
 
@@ -225,7 +223,7 @@ export default function Dashboard() {
   return (
     <>
       <div className="header-div">
-        <h1 className="header-title">Dashboard</h1>
+        <h1 className="header-title"> Dashboard </h1>
         <div>
           <Select
             loading={propertyDropdownLoading}
@@ -252,7 +250,7 @@ export default function Dashboard() {
           className="fadeInUp"
           style={{ animationDelay: "0.3s" }}
         >
-          <Card className="dashboard-Card">tt</Card>
+          <Card className="dashboard-Card"> tt </Card>
         </Col>
         <Col
           xs={24}
@@ -262,7 +260,7 @@ export default function Dashboard() {
           className="fadeInUp"
           style={{ animationDelay: "0.4s" }}
         >
-          <Card className="dashboard-Card">tt</Card>
+          <Card className="dashboard-Card"> tt </Card>
         </Col>
         <Col
           xs={24}
@@ -272,7 +270,7 @@ export default function Dashboard() {
           className="fadeInUp"
           style={{ animationDelay: "0.5s" }}
         >
-          <Card className="dashboard-Card">tt</Card>
+          <Card className="dashboard-Card"> tt </Card>
         </Col>
         <Col
           xs={24}
@@ -282,7 +280,7 @@ export default function Dashboard() {
           className="fadeInUp"
           style={{ animationDelay: "0.6s" }}
         >
-          <Card className="dashboard-Card">tt</Card>
+          <Card className="dashboard-Card"> tt </Card>
         </Col>
       </Row>
       <Row gutter={[24, 24]}>
@@ -439,12 +437,9 @@ export default function Dashboard() {
               <table className="table mb-0">
                 <thead>
                   <tr>
-                    <th>#</th>
-                    <th>Tenant</th>
-                    <th>Unit</th>
-                    <th>Bill Period</th>
-                    <th>Bill Date</th>
-                    <th>Due Date</th>
+                    <th> # </th> <th> Tenant </th> <th> Unit </th>
+                    <th> Bill Period </th> <th> Bill Date </th>
+                    <th> Due Date </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -454,13 +449,12 @@ export default function Dashboard() {
                         var index = index + 1;
                         return (
                           <tr key={index}>
-                            <td>{index}</td>
-                            <td>{item.tenantName}</td>
-                            <td>{item.unitName}</td>
+                            <td> {index} </td> <td> {item.tenantName} </td>
+                            <td> {item.unitName} </td>
                             <td>
                               {moment(
                                 global.changeUtcToLocal(item.startingDate)
-                              ).format("Do MMMM")}{" "}
+                              ).format("Do MMMM")}
                               {" - "}
                               {moment(
                                 global.changeUtcToLocal(item.endingDate)
@@ -515,12 +509,8 @@ export default function Dashboard() {
               <table className="table mb-0">
                 <thead>
                   <tr>
-                    <th>#</th>
-                    <th>Tenant</th>
-                    <th>Unit</th>
-                    <th>Bill Date</th>
-                    <th>Paid Date</th>
-                    <th>Balance</th>
+                    <th> # </th> <th> Tenant </th> <th> Unit </th>
+                    <th> Bill Date </th> <th> Paid Date </th> <th> Balance </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -530,9 +520,8 @@ export default function Dashboard() {
                         var index = index + 1;
                         return (
                           <tr key={index}>
-                            <td>{index}</td>
-                            <td>{item.tenantName}</td>
-                            <td>{item.unitName}</td>
+                            <td> {index} </td> <td> {item.tenantName} </td>
+                            <td> {item.unitName} </td>
                             <td>
                               {moment(
                                 global.changeUtcToLocal(item.billingDate)
@@ -543,7 +532,7 @@ export default function Dashboard() {
                                 global.changeUtcToLocal(item.paymentDate)
                               ).format("Do MMMM")}
                             </td>
-                            <td>₹{item.balance}</td>
+                            <td> ₹{item.balance} </td>
                           </tr>
                         );
                       })}
