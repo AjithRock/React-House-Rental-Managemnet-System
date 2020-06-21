@@ -192,7 +192,7 @@ export default function TenantProfile() {
             </Row>
             <Row>
               <Tabs defaultActiveKey="1" style={{ width: "100%" }} size="large">
-                <TabPane tab="Details" key="1">
+                <TabPane tab="Payment" key="1">
                   <p>Content of Tab Pane 2</p>
                   <p>Content of Tab Pane 2</p>
                   <p>Content of Tab Pane 2</p>

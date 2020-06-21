@@ -234,7 +234,6 @@ export default function Property() {
             New Property
           </Button>
         </div>
-       
       </div>
       <div className="fadeInUp" style={{ animationDelay: "0.3s" }}>
         <Drawer
@@ -301,12 +300,14 @@ export default function Property() {
           bodyStyle={{ padding: 0 }}
         >
           <Table
+            scroll={{ x: true }}
             columns={columns}
             bordered={true}
             dataSource={data}
             loading={loading}
             pagination={{
               total: data.length,
+              showSizeChanger: true,
               showTotal: (total, range) =>
                 `${range[0]}-${range[1]} of ${total} items`,
             }}

@@ -287,7 +287,7 @@ export default function Payment() {
   return (
     <div>
       <div className="header-div">
-        <h1 className="header-title">Payment </h1>
+        <h1 className="header-title">Billing</h1>
         <div className="fadeInUp" style={{ animationDelay: "0.6s" }}>
           <Tooltip title="Sync Invoive">
             <Button
@@ -531,6 +531,7 @@ export default function Payment() {
           bodyStyle={{ padding: 0 }}
         >
           <Table
+            scroll={{ x: true }}
             columns={columns}
             bordered={true}
             dataSource={data}
@@ -538,6 +539,7 @@ export default function Payment() {
             pagination={{
               total: data.length,
               showSizeChanger: true,
+              responsive:true,
               showTotal: (total, range) =>
                 `${range[0]}-${range[1]} of ${total} items`,
             }}

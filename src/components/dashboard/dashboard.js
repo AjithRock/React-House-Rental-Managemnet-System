@@ -136,7 +136,7 @@ export default function Dashboard() {
       .get(`${global.url}/api/dashboard/propertyAvailability/${propertyID}`)
       .then(function (response) {
         var responseData = response.data;
-        var dataArr = [responseData[0].vacant, responseData[0].occupied];
+        var dataArr = [responseData[0].occupied ,responseData[0].vacant];
         setAvailabilityProperty({
           datasets: [
             {

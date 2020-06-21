@@ -1,80 +1,105 @@
 $width-100: 100%;
-
 .fadeInUp {
-  animation-duration: 0.45s;
-  animation-fill-mode: both;
-  animation-name: fadeInUp;
+    animation-duration: 0.45s;
+    animation-fill-mode: both;
+    animation-name: fadeInUp;
 }
 
 @keyframes fadeInUp {
-  0% {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .fade-in {
-  opacity: 1;
-  animation-name: fadeInOpacity;
-  animation-iteration-count: 1;
-  animation-timing-function: ease-in;
-  animation-duration: 0.4s;
+    opacity: 1;
+    animation-name: fadeInOpacity;
+    animation-iteration-count: 1;
+    animation-timing-function: ease-in;
+    animation-duration: 0.4s;
 }
 
 @keyframes fadeInOpacity {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
 }
 
 .dashboard-Card {
-  width: $width-100;
-  box-shadow: 0 2px 18px 1px rgba(49, 53, 72, 0.1);
-  border-radius: 0.45rem;
+    width: $width-100;
+    box-shadow: 0 2px 18px 1px rgba(49, 53, 72, 0.1);
+    border-radius: 0.65rem;
 }
 
-.table-responsive {
-  display: block;
-  width: $width-100;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
+.mb-0,
+.my-0 {
+    margin-bottom: 0 !important;
 }
 
-.mb-0, .my-0 {
-  margin-bottom: 0 !important;
-}
 .table {
-  width: 100%;
-  margin-bottom: 1.5rem;
-  color: #6c757d;
+    width: 100%;
+    margin-bottom: 1.5rem;
+    color: #6c757d;
 }
+
 table {
-  border-collapse: collapse;
+    border-collapse: collapse;
 }
 
 .table thead th {
-  vertical-align: bottom;
-  border-bottom: 2px solid #f5f3f3;
+    vertical-align: bottom;
+    border-bottom: 2px solid #f5f3f3;
 }
+
 .table th {
-  font-weight: 500;
+    font-weight: 500;
 }
-.table td, .table th {
-  padding: .85rem;
-  vertical-align: top;
+
+.table td,
+.table th {
+    padding: .85rem;
+    vertical-align: top;
 }
+
 th {
-  text-align: inherit;
+    text-align: inherit;
 }
 
 .table {
-  color: #6c757d;
+    color: #6c757d;
+}
+
+.invoice-header {
+    height: 140px;
+    color: white;
+    background: #001529;
+    display: flex;
+    align-items: center;
+}
+
+.invoice-footer {
+    height: 10px;
+}
+
+.invoice-title {
+    display: inline-block;
+    width: 50%;
+    font-size: 2.5rem;
+    font-variant: all-small-caps;
+    padding: 20px;
+}
+
+.Company-logo {
+    display: inline-block;
+    width: 50%;
+    text-align: right;
+    padding: 20px;
 }

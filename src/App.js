@@ -58,7 +58,7 @@ export default function App() {
     { key: "2", name: "/Property" },
     { key: "3", name: "/Unit" },
     { key: "4", name: "/Tenant" },
-    { key: "5", name: "/Payment" },
+    { key: "5", name: "/Billing" },
     { key: "6", name: "/Report" },
     { key: "7", name: "/Admin" },
   ];
@@ -81,6 +81,10 @@ export default function App() {
         }}
       >
         <Sider
+          breakpoint="md"
+          onBreakpoint={(broken) => {
+            setCollapsed(broken)
+          }}
           style={{
             overflow: "auto",
             height: "100vh",
@@ -116,7 +120,7 @@ export default function App() {
             </Menu.Item>
             <Menu.Item key="5">
               <CarryOutOutlined />
-              <span>Payment</span> <Link to="/Payment"></Link>
+              <span>Billing</span> <Link to="/Billing"></Link>
             </Menu.Item>
             <Menu.Item key="6">
               <FileDoneOutlined />
@@ -182,7 +186,7 @@ export default function App() {
               <Route path="/Property" component={Property} />
               <Route path="/Unit" component={Unit} />
               <Route path="/Tenant" component={Tenant} />
-              <Route path="/Payment" component={Payment} />
+              <Route path="/Billing" component={Payment} />
               <Route path="/Report" component={Report} />
               <Route path="/Admin" component={Admin} />
               <Route path="*" component={PageNotFound} />

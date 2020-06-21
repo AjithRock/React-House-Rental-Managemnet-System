@@ -373,6 +373,7 @@ export default function Unit() {
           bodyStyle={{ padding: 0 }}
         >
           <Table
+            scroll={{ x: true }}
             columns={columns}
             bordered={true}
             dataSource={data}

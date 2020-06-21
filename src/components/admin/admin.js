@@ -12,6 +12,23 @@ export default function Admin() {
         <Breadcrumb.Item>List</Breadcrumb.Item>
         <Breadcrumb.Item>App</Breadcrumb.Item>
       </Breadcrumb>
+      <div className="invoice-header">
+        <div className="invoice-title">
+          invoice
+        </div>
+        <div className="Company-logo">
+          <span>
+            test
+          </span>
+        </div>
+      </div>
+      <div>
+        conternt
+      </div>
+      <div className="invoice-footer">
+        foots
+      </div>
+
     </>
   );
 }
