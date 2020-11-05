@@ -29,7 +29,7 @@ export default function Payment() {
   const [tenantDropdownLoading, setTenantDropdownLoading] = useState(false);
   const [invoiceObj, setInvoiceObj] = useState([]);
   const [invoiceDropdownLoading, setInvoiceDropdownLoading] = useState(false);
-  const [syncInvoiceLoading, setSyncInvoiceLoading] = useState(false);
+  const [generateInvoiceLoading, setGenerateInvoiceLoading] = useState(false);
   const [paymentTypeObj, setPaymentTypeObj] = useState([]);
   const [paymentTypeDropdownLoading, setPaymentTypeDropdownLoading] = useState(
     false
@@ -170,9 +170,9 @@ export default function Payment() {
     console.log(editData);
   };
 
-  const syncInvoice = () => {
-    message.loading({ content: "Sync On Process", key: "Payment" });
-    setSyncInvoiceLoading(true);
+  const generateInvoice = () => {
+    message.loading({ content: "Generate On Process", key: "Payment" });
+    setGenerateInvoiceLoading(true);
     axios
       .get(`${global.url}/api/billingSync`)
       .then(function (response) {
@@ -181,11 +181,11 @@ export default function Payment() {
           key: "Payment",
           duration: 3,
         });
-        setSyncInvoiceLoading(false);
+        setGenerateInvoiceLoading(false);
       })
       .catch(function (error) {
         message.error({
-          content: "Sync Failed!",
+          content: "Generate Failed!",
           key: "Payment",
           duration: 3,
         });
@@ -289,15 +289,15 @@ export default function Payment() {
       <div className="header-div">
         <h1 className="header-title">Billing</h1>
         <div className="fadeInUp" style={{ animationDelay: "0.6s" }}>
-          <Tooltip title="Sync Invoive">
+          <Tooltip title="Generate Invoice">
             <Button
               style={{ marginRight: 10 }}
               type="primary"
               ghost
-              onClick={syncInvoice}
-              disabled={syncInvoiceLoading}
+              onClick={generateInvoice}
+              disabled={generateInvoiceLoading}
             >
-              <SyncOutlined spin={syncInvoiceLoading} />
+              <SyncOutlined spin={generateInvoiceLoading} />
             </Button>
           </Tooltip>
 
